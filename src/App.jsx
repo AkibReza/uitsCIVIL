@@ -1,14 +1,20 @@
-import { useState } from 'react'
-
+import { BrowserRouter } from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
-    <>
-      <div className='text-red-600 text-4xl font-bold'>
-        Hello world!
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          <AppRoutes />
+        </main>
+        <Footer />
       </div>
-    </>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
