@@ -220,7 +220,7 @@ const ConcreteHomepage = () => {
           className={`absolute inset-0 bg-[url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white' fill-opacity='0.03'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20v40c11.046 0 20-8.954 20-20z'/%3E%3C/g%3E%3C/svg%3E")] opacity-50`}
         />
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className=" mx-auto px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <div className="animate-pulse mb-6">
               <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
@@ -322,7 +322,11 @@ const ConcreteHomepage = () => {
 
               <div className="relative">
                 <div className="w-full h-96 rounded-lg overflow-hidden bg-gray-600 flex items-center justify-center">
-                  <Camera className="w-24 h-24 text-gray-400" />
+                  <img
+                    src="/Assets/img/home/about.jpg"
+                    alt="Our Research Facilities"
+                    className="object-cover w-full h-full"
+                  />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg" />
                 <div className="absolute bottom-4 left-4 text-white">
@@ -399,7 +403,11 @@ const ConcreteHomepage = () => {
 
                     <div className="mb-4">
                       <div className="w-full h-32 bg-gray-600 rounded-lg flex items-center justify-center">
-                        <Camera className="w-8 h-8 text-gray-400" />
+                        <img
+                          src="/Assets/img/home/about.jpg"
+                          alt="Our Research Facilities"
+                          className="object-cover w-full h-full"
+                        />
                       </div>
                     </div>
 
@@ -485,7 +493,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className="container mx-auto px-6">
+        <div className=" mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible.gallery
@@ -539,7 +547,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.surface }}
       >
-        <div className="container mx-auto px-6">
+        <div className=" mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible["faculty-message"]
@@ -594,7 +602,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className="container mx-auto px-6">
+        <div className=" mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible.leadership
@@ -678,7 +686,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.surface }}
       >
-        <div className="container mx-auto px-6">
+        <div className=" mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible["aci-verification"]
@@ -732,7 +740,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className="container mx-auto px-6">
+        <div className=" mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible.faq
@@ -791,142 +799,6 @@ const ConcreteHomepage = () => {
       </section>
 
       {/* Footer */}
-      <footer
-        className="py-16 border-t"
-        style={{
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
-        }}
-      >
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Shield className="w-8 h-8 text-blue-400 mr-2" />
-                <h3 className="text-xl font-bold text-white">ACI Chapter</h3>
-              </div>
-              <p className="text-gray-400 mb-4">
-                Building the future of concrete technology through education,
-                research, and innovation.
-              </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <MessageCircle className="w-5 h-5 text-white" />
-                </div>
-                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <Users className="w-5 h-5 text-white" />
-                </div>
-                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <Calendar className="w-5 h-5 text-white" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">
-                Quick Links
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="#about"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#events"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Events
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#gallery"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Gallery
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#faq"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">
-                Resources
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="/research"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Research
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/publications"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Publications
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/workshops"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Workshops
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/membership"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Membership
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
-              <div className="space-y-2 text-gray-400">
-                <p>Department of Civil Engineering</p>
-                <p>University Campus</p>
-                <p>Email: info@acichapter.edu</p>
-                <p>Phone: (555) 123-4567</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center">
-            <p className="text-gray-400">
-              © 2025 ACI Student Chapter. All rights reserved. |
-              <span className="text-blue-400 hover:text-blue-300 cursor-pointer ml-1">
-                Privacy Policy
-              </span>{" "}
-              |
-              <span className="text-blue-400 hover:text-blue-300 cursor-pointer ml-1">
-                Terms of Service
-              </span>
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

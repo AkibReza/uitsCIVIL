@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-grow container mx-auto">
+        <main className="flex-grow mx-auto">
           <AppRoutes />
         </main>
         <Footer />
