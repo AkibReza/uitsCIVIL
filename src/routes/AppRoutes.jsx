@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Home from "../pages/Home";
 import Panel from "../pages/Panel";
 import Achievements from "../pages/Achievements";
 import Events from "../pages/Events";
@@ -21,6 +22,7 @@ import AdminGifts from "../pages/admin/Gifts";
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/panel/:year" element={<Panel />} />
       <Route path="/achievements" element={<Achievements />} />
       <Route path="/events" element={<Events />} />
