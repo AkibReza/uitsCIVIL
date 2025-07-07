@@ -75,7 +75,7 @@ const ImageSlider = ({ images, autoSlide = true, interval = 3000 }) => {
   };
 
   return (
-    <div className="relative w-full h-64 overflow-hidden rounded-lg group">
+    <div className="relative w-full h-96 overflow-hidden rounded-lg group">
       <div
         className="flex transition-transform duration-500 ease-in-out h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -83,7 +83,11 @@ const ImageSlider = ({ images, autoSlide = true, interval = 3000 }) => {
         {images.map((image, index) => (
           <div key={index} className="w-full h-full flex-shrink-0 relative">
             <div className="w-full h-full bg-gray-600 flex items-center justify-center">
-              <Camera className="w-16 h-16 text-gray-400" />
+              <img
+                    src={`/Assets/img/home/gallery${index}.jpg`}
+                    alt="Our Research Facilities"
+                    className="object-cover w-full h-full"
+                  />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-4 left-4 text-white">
@@ -149,21 +153,21 @@ const ConcreteHomepage = () => {
       date: "2025-01-15",
       title: "Concrete Innovation Workshop",
       description: "Advanced techniques in sustainable concrete construction",
-      image: "/api/placeholder/300/200",
+      image: "/Assets/img/home/event_1.jpg",
     },
     {
       id: 2,
       date: "2025-01-10",
       title: "Industry Partnership Summit",
       description: "Connecting academia with industry leaders",
-      image: "/api/placeholder/300/200",
+      image: "/Assets/img/home/event_2.jpg",
     },
     {
       id: 3,
       date: "2025-01-05",
       title: "Student Research Showcase",
       description: "Presenting cutting-edge research in concrete technology",
-      image: "/api/placeholder/300/200",
+      image: "/Assets/img/home/event_3.jpg",
     },
   ];
 
@@ -323,7 +327,7 @@ const ConcreteHomepage = () => {
               <div className="relative">
                 <div className="w-full h-96 rounded-lg overflow-hidden bg-gray-600 flex items-center justify-center">
                   <img
-                    src="/Assets/img/home/about.jpg"
+                    src="/Assets/img/home/about_us.jpg"
                     alt="Our Research Facilities"
                     className="object-cover w-full h-full"
                   />
@@ -349,91 +353,105 @@ const ConcreteHomepage = () => {
 
       {/* Recent Events Section */}
       <section
-        id="events"
-        data-animate
-        className="py-20"
-        style={{ backgroundColor: colors.background }}
-      >
-        <div className="container mx-auto px-6">
+  id="events"
+  data-animate
+  className="py-20"
+  style={{ backgroundColor: colors.background }}
+>
+  <div className="container mx-auto px-6">
+    <div
+      className={`transition-all duration-1000 ${
+        isVisible.events
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
+    >
+      <div className="text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          Recent Events
+        </h2>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          Stay updated with our latest workshops, conferences, and
+          community activities
+        </p>
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        {recentEvents.map((event, index) => (
           <div
-            className={`transition-all duration-1000 ${
-              isVisible.events
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            key={event.id}
+            className="relative mb-12 last:mb-0"
           >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Recent Events
-              </h2>
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                Stay updated with our latest workshops, conferences, and
-                community activities
-              </p>
-            </div>
+            {/* Timeline line - hidden on mobile, visible on desktop */}
+            <div className="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400"></div>
+            
+            {/* Timeline dot */}
+            <div className="hidden md:block absolute left-6 top-8 w-4 h-4 bg-blue-400 rounded-full border-4 border-gray-900 z-10"></div>
+            
+            <div className="md:ml-20">
+              <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+                {/* Event Image */}
+                <div className="w-full h-64 md:h-48 bg-gray-700 overflow-hidden">
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                
+                {/* Event Details */}
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Calendar className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-400">
+                      {new Date(event.date).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
 
-            <div className="relative">
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white hover:text-blue-400 transition-colors duration-300">
+                    {event.title}
+                  </h3>
+                  
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    {event.description}
+                  </p>
 
-              {recentEvents.map((event, index) => (
-                <div
-                  key={event.id}
-                  className={`relative mb-12 ${
-                    index % 2 === 0
-                      ? "md:pr-1/2 md:text-right"
-                      : "md:pl-1/2 md:ml-8"
-                  }`}
-                >
-                  <div
-                    className={`bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 ${
-                      index % 2 === 0 ? "md:mr-8" : ""
-                    }`}
-                  >
-                    <div className="flex items-center mb-4">
-                      <Calendar className="w-5 h-5 text-blue-400 mr-2" />
-                      <span className="text-sm text-gray-400">
-                        {new Date(event.date).toLocaleDateString()}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-bold mb-3 text-white">
-                      {event.title}
-                    </h3>
-                    <p className="text-gray-300 mb-4">{event.description}</p>
-
-                    <div className="mb-4">
-                      <div className="w-full h-32 bg-gray-600 rounded-lg flex items-center justify-center">
-                        <img
-                          src="/Assets/img/home/about.jpg"
-                          alt="Our Research Facilities"
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                    </div>
-
+                  <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                     <button
-                      className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300"
+                      className="group px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                       onClick={() => (window.location.href = "/event")}
                     >
                       Read More
-                      <ChevronRight className="inline ml-2 w-4 h-4" />
+                      <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
+                    
+                    {/* Optional: Add event type or location */}
+                    <div className="flex items-center text-sm text-gray-400">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                      Workshop
+                    </div>
                   </div>
-
-                  <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-blue-400 rounded-full border-4 border-gray-900 top-8"></div>
                 </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <button className="px-6 py-3 rounded-lg border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300">
-                View All Events
-                <ChevronRight className="inline ml-2 w-4 h-4" />
-              </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
+
+      <div className="text-center mt-16">
+        <button className="group px-8 py-4 rounded-lg border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+          View All Events
+          <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Achievements Section */}
       <section
@@ -493,7 +511,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className=" mx-auto px-6">
+        <div className="container mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible.gallery
@@ -519,7 +537,11 @@ const ConcreteHomepage = () => {
               {mediaGallery.map((item, index) => (
                 <div key={index} className="relative group cursor-pointer">
                   <div className="w-full h-48 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
-                    <Camera className="w-12 h-12 text-gray-400" />
+                    <img
+                    src={`/Assets/img/home/img${index}.jpg`}
+                    alt="Our Research Facilities"
+                    className="object-cover w-full h-full"
+                  />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -602,7 +624,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className=" mx-auto px-6">
+        <div className="mx-auto px-6"> 
           <div
             className={`transition-all duration-1000 ${
               isVisible.leadership

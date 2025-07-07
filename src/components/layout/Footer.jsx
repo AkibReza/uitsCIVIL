@@ -23,7 +23,7 @@ const Footer = () => {
         borderColor: colors.border,
       }}
     >
-      <div className=" mx-auto px-6">
+      <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
