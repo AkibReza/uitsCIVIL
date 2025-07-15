@@ -18,37 +18,54 @@ const Events = () => {
       id: 1,
       title: "First General Meeting",
       date: "18 March, 2024",
-      description: "The first general meeting of ACI UITS Student Chapter was held on 18 March, 2024. This meeting was a discussion session for planning for future participation & activities.",
-      images: ["/Assets/img/events/Picture2.png", "/Assets/img/events/Picture3.png"]
+      description:
+        "The first general meeting of ACI UITS Student Chapter was held on 18 March, 2024. This meeting was a discussion session for planning for future participation & activities.",
+      images: [
+        "/Assets/img/events/Picture2.png",
+        "/Assets/img/events/Picture3.png",
+      ],
     },
     {
       id: 2,
       title: "ACI UITS Student Chapter Review Meeting",
       date: "8 May, 2024",
-      description: "ACI UITS Student Chapter successfully conducted a review meeting to discuss their chapter activities. The primary focus of the meeting was to expand concrete knowledge and technology, organize seminars by key resource persons, develop research skills, and build collaborations.",
-      images: ["/Assets/img/events/Picture2.png", "/Assets/img/events/Picture3.png"]
+      description:
+        "ACI UITS Student Chapter successfully conducted a review meeting to discuss their chapter activities. The primary focus of the meeting was to expand concrete knowledge and technology, organize seminars by key resource persons, develop research skills, and build collaborations.",
+      images: [
+        "/Assets/img/events/Picture2.png",
+        "/Assets/img/events/Picture3.png",
+      ],
     },
     {
       id: 3,
       title: "Executive Committee Announcement Session",
       date: "22 May, 2024",
-      description: "Official announcement of the executive committee members and their roles for the upcoming term.",
-      images: ["/Assets/img/events/Picture4.png"]
+      description:
+        "Official announcement of the executive committee members and their roles for the upcoming term.",
+      images: ["/Assets/img/events/Picture4.png"],
     },
     {
       id: 4,
       title: "Meet up with Freshers",
       date: "21 April, 2024",
-      description: "Successful meetup session was held with the students of Level-1, Semester-2 from the Department of Civil Engineering, UITS, organized by the ACI UITS Student Chapter. The session focused on discussing the General Member Recruitment Process, along with the vision and upcoming activities of ACI.",
-      images: ["/Assets/img/events/Picture5.png", "/Assets/img/events/Picture6.png"]
+      description:
+        "Successful meetup session was held with the students of Level-1, Semester-2 from the Department of Civil Engineering, UITS, organized by the ACI UITS Student Chapter. The session focused on discussing the General Member Recruitment Process, along with the vision and upcoming activities of ACI.",
+      images: [
+        "/Assets/img/events/Picture5.png",
+        "/Assets/img/events/Picture6.png",
+      ],
     },
     {
       id: 5,
       title: "Networking Session",
       date: "Various Dates",
-      description: "Regular networking sessions to build connections among members and foster collaboration within the chapter.",
-      images: ["/Assets/img/events/Picture7.png", "/Assets/img/events/Picture8.png"]
-    }
+      description:
+        "Regular networking sessions to build connections among members and foster collaboration within the chapter.",
+      images: [
+        "/Assets/img/events/Picture7.png",
+        "/Assets/img/events/Picture8.png",
+      ],
+    },
   ];
 
   return (
@@ -61,8 +78,8 @@ const Events = () => {
           </h1>
           <div className="max-w-3xl mx-auto">
             <p className="text-gray-300 text-lg leading-relaxed">
-              A detailed chronicle of the impactful events organized and hosted by
-              our chapter - including seminars, knowledge sessions, chapter
+              A detailed chronicle of the impactful events organized and hosted
+              by our chapter - including seminars, knowledge sessions, chapter
               launches, and special observances. This archive reflects our
               commitment to fostering continuous learning and innovation.
             </p>
@@ -78,7 +95,6 @@ const Events = () => {
               className={`relative bg-gray-800 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-purple-500/20 hover:scale-[1.02] animate-slide-up`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-                            
               {/* Content Container */}
               <div className="p-8 md:p-12">
                 {/* Event Header */}
@@ -97,11 +113,13 @@ const Events = () => {
                 </div>
 
                 {/* Images Grid */}
-                <div className={`grid gap-6 ${
-                  event.images.length === 1 
-                    ? 'grid-cols-1 max-w-2xl mx-auto' 
-                    : 'grid-cols-1 md:grid-cols-2'
-                }`}>
+                <div
+                  className={`grid gap-6 ${
+                    event.images.length === 1
+                      ? "grid-cols-1 max-w-2xl mx-auto"
+                      : "grid-cols-1 md:grid-cols-2"
+                  }`}
+                >
                   {event.images.map((image, imgIndex) => (
                     <div
                       key={imgIndex}
@@ -122,8 +140,12 @@ const Events = () => {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                   </svg>
                                 </div>
-                                <p class="text-white font-medium text-lg mb-2">${event.title}</p>
-                                <p class="text-gray-300 text-sm">Event Photo ${imgIndex + 1}</p>
+                                <p class="text-white font-medium text-lg mb-2">${
+                                  event.title
+                                }</p>
+                                <p class="text-gray-300 text-sm">Event Photo ${
+                                  imgIndex + 1
+                                }</p>
                                 <p class="text-gray-400 text-xs mt-2">Image not found</p>
                               </div>
                             </div>
@@ -132,12 +154,22 @@ const Events = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <p className="text-sm font-medium">Click to view larger</p>
+                        <p className="text-sm font-medium">Click to expand</p>
                       </div>
                       {/* Zoom icon */}
                       <div className="absolute top-4 right-4 bg-black/50 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                          />
                         </svg>
                       </div>
                     </div>
@@ -173,11 +205,21 @@ const Events = () => {
               onClick={closeModal}
               className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors duration-200 z-10"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
-            
+
             {/* Modal content */}
             <div className="bg-gray-800 rounded-2xl overflow-hidden shadow-2xl">
               <img
@@ -202,8 +244,12 @@ const Events = () => {
                 }}
               />
               <div className="p-6 border-t border-gray-700">
-                <h3 className="text-white font-semibold text-lg">{selectedImage.title}</h3>
-                <p className="text-gray-400 text-sm mt-1">Click outside or press the X to close</p>
+                <h3 className="text-white font-semibold text-lg">
+                  {selectedImage.title}
+                </h3>
+                {/*   <p className="text-gray-400 text-sm mt-1">
+                  Click outside or press the X to close
+                </p> */}
               </div>
             </div>
           </div>
@@ -213,19 +259,31 @@ const Events = () => {
       {/* Custom Styles */}
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        
+
         @keyframes slideUp {
-          from { opacity: 0; transform: translateY(50px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        
+
         .animate-fade-in {
           animation: fadeIn 0.8s ease-out;
         }
-        
+
         .animate-slide-up {
           animation: slideUp 0.8s ease-out forwards;
           opacity: 0;
