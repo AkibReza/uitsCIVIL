@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-800 text-white">
+    <nav className="bg-gray-800 text-white z-20">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="font-bold text-xl">

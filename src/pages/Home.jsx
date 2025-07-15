@@ -84,10 +84,10 @@ const ImageSlider = ({ images, autoSlide = true, interval = 3000 }) => {
           <div key={index} className="w-full h-full flex-shrink-0 relative">
             <div className="w-full h-full bg-gray-600 flex items-center justify-center">
               <img
-                    src={`/Assets/img/home/gallery${index}.jpg`}
-                    alt="Our Research Facilities"
-                    className="object-cover w-full h-full"
-                  />
+                src={`/Assets/img/home/gallery${index}.jpg`}
+                alt="Our Research Facilities"
+                className="object-cover w-full h-full"
+              />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-4 left-4 text-white">
@@ -224,7 +224,7 @@ const ConcreteHomepage = () => {
           className={`absolute inset-0 bg-[url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white' fill-opacity='0.03'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20v40c11.046 0 20-8.954 20-20z'/%3E%3C/g%3E%3C/svg%3E")] opacity-50`}
         />
 
-        <div className=" mx-auto px-6 relative z-10">
+        <div className=" mx-auto px-6 relative z-0">
           <div className="text-center max-w-4xl mx-auto">
             <div className="animate-pulse mb-6">
               <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
@@ -353,105 +353,102 @@ const ConcreteHomepage = () => {
 
       {/* Recent Events Section */}
       <section
-  id="events"
-  data-animate
-  className="py-20"
-  style={{ backgroundColor: colors.background }}
->
-  <div className="container mx-auto px-6">
-    <div
-      className={`transition-all duration-1000 ${
-        isVisible.events
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-10"
-      }`}
-    >
-      <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Recent Events
-        </h2>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Stay updated with our latest workshops, conferences, and
-          community activities
-        </p>
-      </div>
-
-      <div className="max-w-4xl mx-auto">
-        {recentEvents.map((event, index) => (
+        id="events"
+        data-animate
+        className="py-20"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="container mx-auto px-6">
           <div
-            key={event.id}
-            className="relative mb-12 last:mb-0"
+            className={`transition-all duration-1000 ${
+              isVisible.events
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
           >
-            {/* Timeline line - hidden on mobile, visible on desktop */}
-            <div className="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400"></div>
-            
-            {/* Timeline dot */}
-            <div className="hidden md:block absolute left-6 top-8 w-4 h-4 bg-blue-400 rounded-full border-4 border-gray-900 z-10"></div>
-            
-            <div className="md:ml-20">
-              <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
-                {/* Event Image */}
-                <div className="w-full h-64 md:h-48 bg-gray-700 overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                
-                {/* Event Details */}
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Calendar className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
-                    <span className="text-sm text-gray-400">
-                      {new Date(event.date).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Recent Events
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                Stay updated with our latest workshops, conferences, and
+                community activities
+              </p>
+            </div>
 
-                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white hover:text-blue-400 transition-colors duration-300">
-                    {event.title}
-                  </h3>
-                  
-                  <p className="text-gray-300 mb-6 leading-relaxed">
-                    {event.description}
-                  </p>
+            <div className="max-w-4xl mx-auto">
+              {recentEvents.map((event, index) => (
+                <div key={event.id} className="relative mb-12 last:mb-0">
+                  {/* Timeline line - hidden on mobile, visible on desktop */}
+                  <div className="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400"></div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                    <button
-                      className="group px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                      onClick={() => (window.location.href = "/event")}
-                    >
-                      Read More
-                      <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
-                    
-                    {/* Optional: Add event type or location */}
-                    <div className="flex items-center text-sm text-gray-400">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                      Workshop
+                  {/* Timeline dot */}
+                  <div className="hidden md:block absolute left-6 top-8 w-4 h-4 bg-blue-400 rounded-full border-4 border-gray-900 z-10"></div>
+
+                  <div className="md:ml-20">
+                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+                      {/* Event Image */}
+                      <div className="w-full h-64 md:h-48 bg-gray-700 overflow-hidden">
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+
+                      {/* Event Details */}
+                      <div className="p-6">
+                        <div className="flex items-center mb-4">
+                          <Calendar className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
+                          <span className="text-sm text-gray-400">
+                            {new Date(event.date).toLocaleDateString("en-US", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl md:text-2xl font-bold mb-3 text-white hover:text-blue-400 transition-colors duration-300">
+                          {event.title}
+                        </h3>
+
+                        <p className="text-gray-300 mb-6 leading-relaxed">
+                          {event.description}
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                          <button
+                            className="group px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                            onClick={() => (window.location.href = "/event")}
+                          >
+                            Read More
+                            <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                          </button>
+
+                          {/* Optional: Add event type or location */}
+                          <div className="flex items-center text-sm text-gray-400">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                            Workshop
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-16">
+              <button className="group px-8 py-4 rounded-lg border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+                View All Events
+                <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-
-      <div className="text-center mt-16">
-        <button className="group px-8 py-4 rounded-lg border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
-          View All Events
-          <ChevronRight className="inline ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* Achievements Section */}
       <section
@@ -538,10 +535,10 @@ const ConcreteHomepage = () => {
                 <div key={index} className="relative group cursor-pointer">
                   <div className="w-full h-48 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
                     <img
-                    src={`/Assets/img/home/img${index}.jpg`}
-                    alt="Our Research Facilities"
-                    className="object-cover w-full h-full"
-                  />
+                      src={`/Assets/img/home/img${index}.jpg`}
+                      alt="Our Research Facilities"
+                      className="object-cover w-full h-full"
+                    />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -624,7 +621,7 @@ const ConcreteHomepage = () => {
         className="py-20"
         style={{ backgroundColor: colors.background }}
       >
-        <div className="mx-auto px-6"> 
+        <div className="mx-auto px-6">
           <div
             className={`transition-all duration-1000 ${
               isVisible.leadership
