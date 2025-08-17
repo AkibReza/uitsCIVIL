@@ -76,6 +76,10 @@ const Navbar = () => {
             <Link to="/admin" className="hover:text-gray-300">
               Admin
             </Link>
+            <Link to="/about" className="hover:text-gray-300">
+              About us
+            </Link>
+            
           </div>
         </div>
 
@@ -112,6 +116,9 @@ const Navbar = () => {
             </Link>
             <Link to="/admin" className="hover:bg-gray-700 px-3 py-2">
               Admin
+            </Link>
+            <Link to="/about" className="hover:bg-gray-700 px-3 py-2">
+              About us
             </Link>
           </div>
         </div>
