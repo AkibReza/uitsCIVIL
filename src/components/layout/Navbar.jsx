@@ -73,6 +73,9 @@ const Navbar = () => {
         {/* Mobile menu */}
         <div className={`${isOpen ? "block" : "hidden"} md:hidden pb-4`}>
           <div className="flex flex-col space-y-2">
+            <Link to="/panel" className="hover:bg-gray-700 px-3 py-2">
+              Panel
+            </Link>
             <Link to="/achievements" className="hover:bg-gray-700 px-3 py-2">
               Achievements
             </Link>
@@ -90,6 +93,12 @@ const Navbar = () => {
             </Link>
             <Link to="/about" className="hover:bg-gray-700 px-3 py-2">
               About us
+            </Link>
+            <Link to="/contact" className="hover:bg-gray-700 px-3 py-2">
+              Contact
+            </Link>
+            <Link to="/sponsorship" className="hover:bg-gray-700 px-3 py-2">
+              Sponsorship
             </Link>
           </div>
         </div>
