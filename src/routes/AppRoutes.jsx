@@ -23,7 +23,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/panel/:year" element={<Panel />} />
+      <Route path="/panel" element={<Panel />} />
       <Route path="/achievements" element={<Achievements />} />
       <Route path="/events" element={<Events />} />
       <Route path="/participations" element={<Participations />} />
