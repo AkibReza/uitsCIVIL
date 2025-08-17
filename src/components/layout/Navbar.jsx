@@ -73,6 +73,9 @@ const Navbar = () => {
             <Link to="/events" className="hover:text-gray-300">
               Events
             </Link>
+            <Link to="/articles" className="hover:text-gray-300">
+              Articles
+            </Link>
             <Link to="/admin" className="hover:text-gray-300">
               Admin
             </Link>
@@ -113,6 +116,9 @@ const Navbar = () => {
             </Link>
             <Link to="/events" className="hover:bg-gray-700 px-3 py-2">
               Events
+            </Link>
+            <Link to="/articles" className="hover:text-gray-300">
+              Articles
             </Link>
             <Link to="/admin" className="hover:bg-gray-700 px-3 py-2">
               Admin
