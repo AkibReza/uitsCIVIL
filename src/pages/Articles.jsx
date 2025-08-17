@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, User, Calendar, ArrowRight, X, Clock, Tag } from 'lucide-react';
@@ -537,7 +536,7 @@ const Articles = () => {
                   </div>
 
                   {/* Article Content */}
-                  <div className="p-6 md:p-8">
+                  <div className="p-6 md:p-8 pb-16">
                     <div 
                       className="prose prose-lg max-w-none"
                       style={{ 
@@ -554,39 +553,22 @@ const Articles = () => {
                 </div>
 
                 {/* Modal Footer */}
-                <div 
+                {/* <div 
                   className="sticky bottom-0 p-6 border-t"
                   style={{ 
                     backgroundColor: colors.surface,
                     borderColor: colors.border
                   }}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="text-center">
                     <div 
                       className="text-sm"
                       style={{ color: colors.textMuted }}
                     >
                       ACI Student Chapter - University of Information Technology & Sciences
                     </div>
-                    
-                    <motion.button
-                      onClick={closeModal}
-                      className="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
-                      style={{ 
-                        backgroundColor: colors.surfaceLight,
-                        color: colors.text,
-                        border: `1px solid ${colors.border}`
-                      }}
-                      whileHover={{ 
-                        backgroundColor: colors.border,
-                        scale: 1.02
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Close Article
-                    </motion.button>
                   </div>
-                </div>
+                </div> */}
               </motion.div>
             </motion.div>
           )}
@@ -595,6 +577,5 @@ const Articles = () => {
     </div>
   );
 };
-
 
 export default Articles;
