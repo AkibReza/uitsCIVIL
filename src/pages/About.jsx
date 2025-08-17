@@ -18,11 +18,14 @@ const colors = {
 
 export default function About() {
   return (
-    <div className="min-h-screen" style={{ background: colors.background, color: colors.text }}>
+    <div
+      className="min-h-screen"
+      style={{ background: colors.background, color: colors.text }}
+    >
       {/* Hero Banner */}
       <section
         className="relative flex items-center justify-center h-[60vh] bg-cover bg-center"
-        style={{ backgroundImage: `url('/Assets/img/home/about_us.jpg')` }}
+        style={{ backgroundImage: `url('/assets/img/home/about_us.jpg')` }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
         <motion.h1
@@ -36,7 +39,10 @@ export default function About() {
       </section>
 
       {/* Brief */}
-      <section className="py-16 px-6 text-center" style={{ backgroundColor: colors.surface }}>
+      <section
+        className="py-16 px-6 text-center"
+        style={{ backgroundColor: colors.surface }}
+      >
         <div className="max-w-4xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -59,7 +65,10 @@ export default function About() {
       </section>
 
       {/* Timeline (alternate style with hover) */}
-      <section className="py-16 px-6" style={{ backgroundColor: colors.surfaceLight }}>
+      <section
+        className="py-16 px-6"
+        style={{ backgroundColor: colors.surfaceLight }}
+      >
         <h3 className="text-2xl font-bold text-center mb-12">Our History</h3>
         <div className="relative max-w-4xl mx-auto">
           <div
@@ -88,7 +97,10 @@ export default function About() {
                   className="p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl hover:shadow-cyan-500/20"
                   style={{ background: colors.surface, color: colors.text }}
                 >
-                  <h4 className="text-xl font-semibold mb-2" style={{ color: colors.primary }}>
+                  <h4
+                    className="text-xl font-semibold mb-2"
+                    style={{ color: colors.primary }}
+                  >
                     {item.year}
                   </h4>
                   <p className="text-gray-300">{item.event}</p>
@@ -157,9 +169,13 @@ export default function About() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 text-center" style={{ background: colors.surface }}>
+      <footer
+        className="py-8 text-center"
+        style={{ background: colors.surface }}
+      >
         <p className="text-sm text-gray-400">
-          © {new Date().getFullYear()} UITS ACI Student Chapter | All Rights Reserved
+          © {new Date().getFullYear()} UITS ACI Student Chapter | All Rights
+          Reserved
         </p>
       </footer>
     </div>

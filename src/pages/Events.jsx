@@ -22,8 +22,8 @@ const Events = () => {
       description:
         "The first general meeting of ACI UITS Student Chapter was held on 18 March, 2024. This meeting was a discussion session for planning for future participation & activities.",
       images: [
-        "/Assets/img/events/Picture2.png",
-        "/Assets/img/events/Picture3.png",
+        "/assets/img/events/Picture2.png",
+        "/assets/img/events/Picture3.png",
       ],
     },
     {
@@ -33,8 +33,8 @@ const Events = () => {
       description:
         "ACI UITS Student Chapter successfully conducted a review meeting to discuss their chapter activities. The primary focus of the meeting was to expand concrete knowledge and technology, organize seminars by key resource persons, develop research skills, and build collaborations.",
       images: [
-        "/Assets/img/events/Picture2.png",
-        "/Assets/img/events/Picture3.png",
+        "/assets/img/events/Picture2.png",
+        "/assets/img/events/Picture3.png",
       ],
     },
     {
@@ -43,7 +43,7 @@ const Events = () => {
       date: "22 May, 2024",
       description:
         "Official announcement of the executive committee members and their roles for the upcoming term.",
-      images: ["/Assets/img/events/Picture4.png"],
+      images: ["/assets/img/events/Picture4.png"],
     },
     {
       id: 4,
@@ -52,8 +52,8 @@ const Events = () => {
       description:
         "Successful meetup session was held with the students of Level-1, Semester-2 from the Department of Civil Engineering, UITS, organized by the ACI UITS Student Chapter. The session focused on discussing the General Member Recruitment Process, along with the vision and upcoming activities of ACI.",
       images: [
-        "/Assets/img/events/Picture5.png",
-        "/Assets/img/events/Picture6.png",
+        "/assets/img/events/Picture5.png",
+        "/assets/img/events/Picture6.png",
       ],
     },
     {
@@ -63,8 +63,8 @@ const Events = () => {
       description:
         "Regular networking sessions to build connections among members and foster collaboration within the chapter.",
       images: [
-        "/Assets/img/events/Picture7.png",
-        "/Assets/img/events/Picture8.png",
+        "/assets/img/events/Picture7.png",
+        "/assets/img/events/Picture8.png",
       ],
     },
   ];

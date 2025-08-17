@@ -84,7 +84,7 @@ const ImageSlider = ({ images, autoSlide = true, interval = 3000 }) => {
           <div key={index} className="w-full h-full flex-shrink-0 relative">
             <div className="w-full h-full bg-gray-600 flex items-center justify-center">
               <img
-                src={`/Assets/img/home/gallery${index}.jpg`}
+                src={`/assets/img/home/gallery${index}.jpg`}
                 alt="Our Research Facilities"
                 className="object-cover w-full h-full"
               />
@@ -153,21 +153,21 @@ const ConcreteHomepage = () => {
       date: "2025-01-15",
       title: "Concrete Innovation Workshop",
       description: "Advanced techniques in sustainable concrete construction",
-      image: "/Assets/img/home/event_1.jpg",
+      image: "/assets/img/home/event_1.jpg",
     },
     {
       id: 2,
       date: "2025-01-10",
       title: "Industry Partnership Summit",
       description: "Connecting academia with industry leaders",
-      image: "/Assets/img/home/event_2.jpg",
+      image: "/assets/img/home/event_2.jpg",
     },
     {
       id: 3,
       date: "2025-01-05",
       title: "Student Research Showcase",
       description: "Presenting cutting-edge research in concrete technology",
-      image: "/Assets/img/home/event_3.jpg",
+      image: "/assets/img/home/event_3.jpg",
     },
   ];
 
@@ -327,7 +327,7 @@ const ConcreteHomepage = () => {
               <div className="relative">
                 <div className="w-full h-96 rounded-lg overflow-hidden bg-gray-600 flex items-center justify-center">
                   <img
-                    src="/Assets/img/home/about_us.jpg"
+                    src="/assets/img/home/about_us.jpg"
                     alt="Our Research Facilities"
                     className="object-cover w-full h-full"
                   />
@@ -535,7 +535,7 @@ const ConcreteHomepage = () => {
                 <div key={index} className="relative group cursor-pointer">
                   <div className="w-full h-48 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
                     <img
-                      src={`/Assets/img/home/img${index}.jpg`}
+                      src={`/assets/img/home/img${index}.jpg`}
                       alt="Our Research Facilities"
                       className="object-cover w-full h-full"
                     />
