@@ -58,11 +58,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* Timeline (alternate style) */}
-      <section className="py-16 px-6 bg-[${colors.surfaceLight}]">
+      {/* Timeline (alternate style with hover) */}
+      <section className="py-16 px-6" style={{ backgroundColor: colors.surfaceLight }}>
         <h3 className="text-2xl font-bold text-center mb-12">Our History</h3>
         <div className="relative max-w-4xl mx-auto">
-          <div className="absolute left-1/2 top-0 h-full w-1 bg-[${colors.primary}] -translate-x-1/2"></div>
+          <div
+            className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2"
+            style={{ background: colors.primary }}
+          ></div>
           {[
             { year: "2025", event: "UITS ACI Chapter Founded" },
             { year: "2026", event: "Outstanding Student Chapter Award" },
@@ -79,15 +82,17 @@ export default function About() {
               }`}
             >
               <div className="w-1/2 px-6">
-                <div
-                  className="p-6 rounded-xl shadow-lg"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl hover:shadow-cyan-500/20"
                   style={{ background: colors.surface, color: colors.text }}
                 >
                   <h4 className="text-xl font-semibold mb-2" style={{ color: colors.primary }}>
                     {item.year}
                   </h4>
                   <p className="text-gray-300">{item.event}</p>
-                </div>
+                </motion.div>
               </div>
               {/* dot */}
               <div
@@ -102,7 +107,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Members / Statistics with details */}
+      {/* Members / Statistics with hover */}
       <section className="py-16 px-6">
         <h3 className="text-2xl font-bold text-center mb-12">Our Community</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -134,11 +139,12 @@ export default function About() {
           ].map((stat, index) => (
             <motion.div
               key={index}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="rounded-xl shadow-lg p-8 flex flex-col items-center text-center"
+              className="rounded-xl shadow-lg p-8 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:shadow-indigo-500/20"
               style={{ background: colors.surfaceLight, color: colors.text }}
             >
               <stat.icon size={40} style={{ color: colors.primary }} />
