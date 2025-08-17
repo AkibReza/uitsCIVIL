@@ -49,14 +49,14 @@ const Navbar = () => {
             <Link to="/events" className="hover:text-gray-300">
               Events
             </Link>
+            <Link to="/certification" className="hover:text-gray-300">
+              Certification
+            </Link>
             <Link to="/articles" className="hover:text-gray-300">
               Articles
             </Link>
             <Link to="/upcoming-events" className="hover:text-gray-300">
               Upcoming Events
-            </Link>
-            <Link to="/admin" className="hover:text-gray-300">
-              Admin
             </Link>
             <Link to="/about" className="hover:text-gray-300">
               About us
@@ -79,14 +79,14 @@ const Navbar = () => {
             <Link to="/events" className="hover:bg-gray-700 px-3 py-2">
               Events
             </Link>
+            <Link to="/certification" className="hover:bg-gray-700 px-3 py-2">
+              Certification
+            </Link>
             <Link to="/articles" className="hover:text-gray-300">
               Articles
             </Link>
             <Link to="/upcoming-events" className="hover:text-gray-300">
               Upcoming Events
-            </Link>
-            <Link to="/admin" className="hover:bg-gray-700 px-3 py-2">
-              Admin
             </Link>
             <Link to="/about" className="hover:bg-gray-700 px-3 py-2">
               About us
