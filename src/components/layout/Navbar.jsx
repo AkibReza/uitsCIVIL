@@ -67,6 +67,9 @@ const Navbar = () => {
             <Link to="/sponsorship" className="hover:text-gray-300">
               For Sponsorship
             </Link>
+            <Link to="/comments" className="hover:text-gray-300">
+              Comments & Reviews
+            </Link>
           </div>
         </div>
 
@@ -99,6 +102,9 @@ const Navbar = () => {
             </Link>
             <Link to="/sponsorship" className="hover:bg-gray-700 px-3 py-2">
               Sponsorship
+            </Link>
+            <Link to="/comments" className="hover:bg-gray-700 px-3 py-2">
+              Comments & Reviews
             </Link>
           </div>
         </div>
