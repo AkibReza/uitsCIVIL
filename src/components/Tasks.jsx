@@ -264,7 +264,7 @@ const Tasks = () => {
                   <option value="">Select a member...</option>
                   {members.map(member => (
                     <option key={member.id} value={member.id}>
-                      {member.displayName || member.name}
+                      {member.displayName || member.email}
                     </option>
                   ))}
                 </select>
