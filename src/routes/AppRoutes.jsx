@@ -1,4 +1,8 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "../context/AuthContext";
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import Login from "../pages/Login";
+import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import Panel from "../pages/Panel";
 import Achievements from "../pages/Achievements";
@@ -12,38 +16,43 @@ import Articles from "../pages/Articles";
 import Papers from "../pages/Papers";
 import UpcomingEvents from "../pages/UpcomingEvents";
 import Comments from "../pages/Comments";
-import AdminDashboard from "../pages/admin/Dashboard";
-import AdminPayment from "../pages/admin/Payment";
-import AdminAttendance from "../pages/admin/Attendance";
-import AdminLevel from "../pages/admin/Level";
-import AdminWarning from "../pages/admin/Warning";
-import AdminGifts from "../pages/admin/Gifts";
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/panel" element={<Panel />} />
-      <Route path="/achievements" element={<Achievements />} />
-      <Route path="/events" element={<Events />} />
-      <Route path="/participations" element={<Participations />} />
-      <Route path="/certification" element={<Certification />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/sponsorship" element={<Sponsorship />} />
-      <Route path="/articles" element={<Articles />} />
-      <Route path="/papers" element={<Papers />} />
-      <Route path="/upcoming-events" element={<UpcomingEvents />} />
-      <Route path="/comments" element={<Comments />} />
-
-      {/* Admin routes */}
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/payment" element={<AdminPayment />} />
-      <Route path="/admin/attendance" element={<AdminAttendance />} />
-      <Route path="/admin/level" element={<AdminLevel />} />
-      <Route path="/admin/warning" element={<AdminWarning />} />
-      <Route path="/admin/gifts" element={<AdminGifts />} />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/uitsCIVIL/login" element={<Login />} />
+        <Route
+          path="/uitsCIVIL/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/uitsCIVIL/admin/dashboard"
+          element={
+            <ProtectedRoute requireAdmin>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/uitsCIVIL" element={<Home />} />
+        <Route path="/uitsCIVIL/panel" element={<Panel />} />
+        <Route path="/uitsCIVIL/achievements" element={<Achievements />} />
+        <Route path="/uitsCIVIL/events" element={<Events />} />
+        <Route path="/uitsCIVIL/participations" element={<Participations />} />
+        <Route path="/uitsCIVIL/certification" element={<Certification />} />
+        <Route path="/uitsCIVIL/about" element={<About />} />
+        <Route path="/uitsCIVIL/contact" element={<Contact />} />
+        <Route path="/uitsCIVIL/sponsorship" element={<Sponsorship />} />
+        <Route path="/uitsCIVIL/articles" element={<Articles />} />
+        <Route path="/uitsCIVIL/papers" element={<Papers />} />
+        <Route path="/uitsCIVIL/upcoming-events" element={<UpcomingEvents />} />
+        <Route path="/uitsCIVIL/comments" element={<Comments />} />
+      </Routes>
+    </AuthProvider>
   );
 };
 
