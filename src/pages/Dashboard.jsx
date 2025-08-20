@@ -14,7 +14,7 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate("/login");
+      navigate("/uitsCIVIL/login");
     } catch (error) {
       console.error("Error logging out:", error);
     }

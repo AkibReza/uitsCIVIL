@@ -5,11 +5,11 @@ export const ProtectedRoute = ({ children, requireAdmin }) => {
   const { user, isAdmin } = useAuth();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/uitsCIVIL/login" />;
   }
 
   if (requireAdmin && !isAdmin) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/uitsCIVIL/dashboard" />;
   }
 
   return children;
