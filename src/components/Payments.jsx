@@ -134,16 +134,26 @@ const Payment = () => {
         }];
       }
 
+      // Update Firestore
       await updateDoc(doc(db, "paymentEntries", entryId), {
         payments: updatedPayments
       });
 
-      // Update local state
-      setEntries(entries.map(e => 
+      // Update local entries state
+      const updatedEntries = entries.map(e => 
         e.id === entryId 
           ? { ...e, payments: updatedPayments }
           : e
-      ));
+      );
+      setEntries(updatedEntries);
+
+      // CRITICAL FIX: Update selectedEntry to reflect the changes immediately
+      if (selectedEntry && selectedEntry.id === entryId) {
+        setSelectedEntry({
+          ...selectedEntry,
+          payments: updatedPayments
+        });
+      }
 
     } catch (error) {
       console.error("Error updating payment status:", error);
@@ -293,7 +303,7 @@ const Payment = () => {
                   {selectedEntry.title}
                 </h3>
                 <p style={{ color: colors.textSecondary }}>
-                  {selectedEntry.type} • Created: {selectedEntry.createdAt?.toDate().toLocaleDateString()}
+                  {selectedEntry.type} • Created: {selectedEntry.createdAt?.toDate?.() ? selectedEntry.createdAt.toDate().toLocaleDateString() : 'Unknown'}
                 </p>
               </div>
               <button
@@ -348,22 +358,25 @@ const Payment = () => {
                   <div className="space-y-2">
                     {members
                       .filter(member => getPaymentStatus(selectedEntry, member.id) === "paid")
-                      .map(member => (
-                        <div
-                          key={member.id}
-                          onClick={() => togglePaymentStatus(selectedEntry.id, member.id)}
-                          className="p-3 rounded cursor-pointer hover:opacity-80 transition-opacity"
-                          style={{ backgroundColor: colors.surface, color: colors.text }}
-                        >
-                          <div className="font-medium">{member.displayName || member.email}</div>
-                          <div className="text-sm" style={{ color: colors.textSecondary }}>
-                            {member.email}
+                      .map(member => {
+                        const paymentInfo = selectedEntry.payments?.find(p => p.memberId === member.id);
+                        return (
+                          <div
+                            key={member.id}
+                            onClick={() => togglePaymentStatus(selectedEntry.id, member.id)}
+                            className="p-3 rounded cursor-pointer hover:opacity-80 transition-opacity"
+                            style={{ backgroundColor: colors.surface, color: colors.text }}
+                          >
+                            <div className="font-medium">{member.displayName || member.email}</div>
+                            <div className="text-sm" style={{ color: colors.textSecondary }}>
+                              {member.email}
+                            </div>
+                            <div className="text-xs" style={{ color: colors.textMuted }}>
+                              Paid: {paymentInfo?.updatedAt?.toDate?.() ? paymentInfo.updatedAt.toDate().toLocaleDateString() : 'Recently'}
+                            </div>
                           </div>
-                          <div className="text-xs" style={{ color: colors.textMuted }}>
-                            Paid: {selectedEntry.payments?.find(p => p.memberId === member.id)?.updatedAt?.toDate().toLocaleDateString()}
-                          </div>
-                        </div>
-                      ))
+                        );
+                      })
                     }
                   </div>
                 </div>
@@ -401,7 +414,7 @@ const Payment = () => {
                       {entry.type}
                     </span>
                     <span style={{ color: colors.textSecondary }}>
-                      Created: {entry.createdAt?.toDate().toLocaleDateString()}
+                      Created: {entry.createdAt?.toDate?.() ? entry.createdAt.toDate().toLocaleDateString() : 'Unknown'}
                     </span>
                   </div>
                 </div>
