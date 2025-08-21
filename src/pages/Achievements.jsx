@@ -5,13 +5,13 @@ const achievements = [
   {
     id: 1,
     title: "International Engineering Competition 2023",
-    image: "/assets/img/achievements/Picture1.png",
+    image: "./assets/img/achievements/Picture1.png",
     isInternational: true,
   },
   {
     id: 2,
     title: "National Civil Engineering Project Exhibition",
-    image: "/assets/img/achievements/Picture1.png",
+    image: "./assets/img/achievements/Picture1.png",
     isInternational: false,
   },
 ];
