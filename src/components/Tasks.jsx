@@ -28,6 +28,7 @@ const Tasks = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showApprovalActions, setShowApprovalActions] = useState(false);
   const { user, isAdmin } = useAuth();
 
   // Fetch tasks based on user role
@@ -149,16 +150,60 @@ const Tasks = () => {
   // Update task status
   const updateTaskStatus = async (taskId, newStatus) => {
     try {
-      await updateDoc(doc(db, "tasks", taskId), {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      // Validate status changes based on user role and current status
+      if (!isAdmin) {
+        // Members can't change completed or rejected tasks
+        if (task.status === "completed" || task.status === "rejected") {
+          return;
+        }
+        // Members can't directly set tasks to completed
+        if (newStatus === "completed") {
+          return;
+        }
+      }
+
+      const updates = {
         status: newStatus,
         updatedAt: new Date()
-      });
+      };
+
+      // Track previous status when admin requests re-do
+      if (isAdmin && task.status === "approval-requested" && newStatus === "pending") {
+        updates.previousStatus = task.status;
+      }
+
+      // Lock editing when task is turned in or rejected
+      if (newStatus === "approval-requested" || newStatus === "rejected") {
+        updates.locked = true;
+      }
+
+      // Unlock task when set back to pending (re-do)
+      if (newStatus === "pending") {
+        updates.locked = false;
+      }
+
+      await updateDoc(doc(db, "tasks", taskId), updates);
       
-      setTasks(tasks.map(task => 
-        task.id === taskId 
-          ? { ...task, status: newStatus, updatedAt: new Date() }
-          : task
+      setTasks(tasks.map(t => 
+        t.id === taskId 
+          ? { ...t, ...updates }
+          : t
       ));
+
+      // Show notification for status changes
+      if (isAdmin) {
+        if (newStatus === "completed") {
+          // You might want to add a notification system here
+          console.log("Task approved and completed");
+        } else if (newStatus === "pending") {
+          console.log("Task returned for re-do");
+        } else if (newStatus === "rejected") {
+          console.log("Task rejected");
+        }
+      }
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -227,6 +272,18 @@ const Tasks = () => {
           backgroundColor: "rgba(139, 92, 246, 0.15)",
           borderColor: "rgba(139, 92, 246, 0.3)"
         };
+      case "approval-requested":
+        return {
+          color: "#f59e0b",
+          backgroundColor: "rgba(245, 158, 11, 0.15)",
+          borderColor: "rgba(245, 158, 11, 0.3)"
+        };
+      case "rejected":
+        return {
+          color: "#ef4444",
+          backgroundColor: "rgba(239, 68, 68, 0.15)",
+          borderColor: "rgba(239, 68, 68, 0.3)"
+        };
       case "pending": 
         return { 
           color: colors.textMuted, 
@@ -255,8 +312,14 @@ const Tasks = () => {
     all: tasks.length,
     pending: tasks.filter(t => t.status === "pending").length,
     "in-progress": tasks.filter(t => t.status === "in-progress").length,
+    "approval-requested": tasks.filter(t => t.status === "approval-requested").length,
     completed: tasks.filter(t => t.status === "completed").length,
+    rejected: tasks.filter(t => t.status === "rejected").length,
   };
+  
+  const availableFilters = isAdmin 
+    ? ["all", "pending", "in-progress", "approval-requested", "completed", "rejected"]
+    : ["all", "pending", "in-progress", "completed", "rejected"];
 
   return (
     <div 
@@ -315,7 +378,7 @@ const Tasks = () => {
           }}
         >
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-1 sm:gap-2">
-            {["all", "pending", "in-progress", "completed"].map(status => (
+            {availableFilters.map(status => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
@@ -326,19 +389,34 @@ const Tasks = () => {
                 }}
               >
                 <span className="capitalize truncate">
-                  {status === "in-progress" ? "In Progress" : status}
+                  {status === "in-progress" ? "In Progress" : 
+                   status === "approval-requested" ? "Approval Requests" : 
+                   status.charAt(0).toUpperCase() + status.slice(1)}
                 </span>
-                <span 
-                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-semibold"
-                  style={{
-                    backgroundColor: filter === status 
-                      ? 'rgba(255, 255, 255, 0.2)' 
-                      : colors.surfaceLight,
-                    color: filter === status ? colors.text : colors.textMuted
-                  }}
-                >
-                  {taskCounts[status]}
-                </span>
+                {status === "approval-requested" && isAdmin && (
+                  <span 
+                    className="px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-semibold animate-pulse"
+                    style={{
+                      backgroundColor: colors.accent,
+                      color: colors.text
+                    }}
+                  >
+                    {taskCounts[status]}
+                  </span>
+                )}
+                {status !== "approval-requested" && (
+                  <span 
+                    className="px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-semibold"
+                    style={{
+                      backgroundColor: filter === status 
+                        ? 'rgba(255, 255, 255, 0.2)' 
+                        : colors.surfaceLight,
+                      color: filter === status ? colors.text : colors.textMuted
+                    }}
+                  >
+                    {taskCounts[status]}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -718,20 +796,66 @@ const Tasks = () => {
                         >
                           Status
                         </span>
-                        <select
-                          value={task.status}
-                          onChange={(e) => updateTaskStatus(task.id, e.target.value)}
-                          className="block mt-1 px-3 py-1.5 rounded-lg text-sm font-medium border-0 focus:ring-2 w-full sm:w-auto"
-                          style={{
-                            backgroundColor: getStatusStyle(task.status).backgroundColor,
-                            color: getStatusStyle(task.status).color,
-                            borderColor: getStatusStyle(task.status).borderColor
-                          }}
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="in-progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                        </select>
+                        {isAdmin && task.status === "approval-requested" ? (
+                          <div className="mt-2 space-y-2">
+                            <button
+                              onClick={() => updateTaskStatus(task.id, "completed")}
+                              className="w-full px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200"
+                              style={{
+                                backgroundColor: "rgba(16, 185, 129, 0.1)",
+                                color: "#10b981",
+                                borderColor: "rgba(16, 185, 129, 0.3)"
+                              }}
+                            >
+                              Approve & Complete
+                            </button>
+                            <button
+                              onClick={() => updateTaskStatus(task.id, "pending")}
+                              className="w-full px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200"
+                              style={{
+                                backgroundColor: colors.surfaceLight,
+                                color: colors.primary,
+                                borderColor: colors.border
+                              }}
+                            >
+                              Request Re-do
+                            </button>
+                            <button
+                              onClick={() => updateTaskStatus(task.id, "rejected")}
+                              className="w-full px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200"
+                              style={{
+                                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                                color: "#ef4444",
+                                borderColor: "rgba(239, 68, 68, 0.3)"
+                              }}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        ) : (
+                          <select
+                            value={task.status}
+                            onChange={(e) => updateTaskStatus(task.id, e.target.value)}
+                            disabled={!isAdmin && (task.status === "completed" || task.status === "rejected" || task.status === "approval-requested")}
+                            className="block mt-1 px-3 py-1.5 rounded-lg text-sm font-medium border-0 focus:ring-2 w-full sm:w-auto disabled:opacity-50"
+                            style={{
+                              backgroundColor: getStatusStyle(task.status).backgroundColor,
+                              color: getStatusStyle(task.status).color,
+                              borderColor: getStatusStyle(task.status).borderColor
+                            }}
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            {!isAdmin && <option value="approval-requested">Turn-in for Review</option>}
+                            {isAdmin && <option value="completed">Completed</option>}
+                            {task.status === "rejected" && <option value="rejected">Rejected</option>}
+                          </select>
+                        )}
+                        {!isAdmin && task.status === "pending" && task.previousStatus === "approval-requested" && (
+                          <p className="mt-2 text-sm" style={{ color: "#f59e0b" }}>
+                            Re-do requested by admin
+                          </p>
+                        )}
                       </div>
 
                       <div>
