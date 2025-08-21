@@ -73,6 +73,9 @@ const Navbar = () => {
             <Link to="/uitsCIVIL/comments" className="hover:text-gray-300">
               Comments & Reviews
             </Link>
+            <Link to="/uitsCIVIL/login" className="hover:text-gray-300">
+              Log in
+            </Link>
           </div>
         </div>
 
@@ -129,6 +132,12 @@ const Navbar = () => {
               className="hover:bg-gray-700 px-3 py-2"
             >
               Comments & Reviews
+            </Link>
+            <Link
+              to="/uitsCIVIL/login"
+              className="hover:bg-gray-700 px-3 py-2"
+            >
+              Log in
             </Link>
           </div>
         </div>
