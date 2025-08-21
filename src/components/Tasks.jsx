@@ -847,7 +847,7 @@ const Tasks = () => {
                             <option value="pending">Pending</option>
                             <option value="in-progress">In Progress</option>
                             {!isAdmin && <option value="approval-requested">Turn-in for Review</option>}
-                            {isAdmin && <option value="completed">Completed</option>}
+                            {(isAdmin || task.status === "completed") && <option value="completed">Completed</option>}
                             {task.status === "rejected" && <option value="rejected">Rejected</option>}
                           </select>
                         )}
