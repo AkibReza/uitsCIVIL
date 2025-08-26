@@ -96,14 +96,14 @@ const Navbar = () => {
               {user ? (
                 <Link
                   to="/uitsCIVIL/dashboard"
-                  className={`text-sm font-medium px-5 py-1.5 rounded-lg ${theme.buttons.primary.background} ${theme.buttons.primary.hover} ${theme.buttons.primary.text} transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap`}
+                  className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
                 >
                   Dashboard
                 </Link>
               ) : (
                 <Link
                   to="/uitsCIVIL/login"
-                  className={`text-sm font-medium px-5 py-1.5 rounded-lg ${theme.buttons.secondary.background} ${theme.buttons.secondary.hover} ${theme.buttons.secondary.text} transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap`}
+                  className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
                 >
                   Log In
                 </Link>
@@ -272,14 +272,14 @@ const Navbar = () => {
               {user ? (
                 <Link
                   to="/uitsCIVIL/dashboard"
-                  className={`block text-sm font-medium ${theme.buttons.primary.background} ${theme.buttons.primary.hover} ${theme.buttons.primary.text} text-center px-4 py-2.5 rounded-lg transition-all duration-200 shadow-lg`}
+                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
                 >
                   Dashboard
                 </Link>
               ) : (
                 <Link
                   to="/uitsCIVIL/login"
-                  className={`block text-sm font-medium ${theme.buttons.secondary.background} ${theme.buttons.secondary.hover} ${theme.buttons.secondary.text} text-center px-4 py-2.5 rounded-lg transition-all duration-200 shadow-lg`}
+                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
                 >
                   Log In
                 </Link>
