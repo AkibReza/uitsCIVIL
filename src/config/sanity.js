@@ -84,3 +84,76 @@ export const fetchPanelByYear = async (year) => {
     return null;
   }
 };
+
+// Fetch all achievements
+export const fetchAchievements = async () => {
+  try {
+    const query = `*[_type == "achievement"] | order(order asc, date desc) {
+      _id,
+      title,
+      description,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      isInternational,
+      date,
+      location,
+      gallery[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      order
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching achievements:", error);
+    return [];
+  }
+};
+
+// Fetch a specific achievement by ID
+export const fetchAchievementById = async (id) => {
+  try {
+    const query = `*[_type == "achievement" && _id == $id][0] {
+      _id,
+      title,
+      description,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      isInternational,
+      date,
+      location,
+      gallery[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      order
+    }`;
+
+    const data = await client.fetch(query, { id });
+    return data;
+  } catch (error) {
+    console.error("Error fetching achievement by ID:", id, error);
+    return null;
+  }
+};
+

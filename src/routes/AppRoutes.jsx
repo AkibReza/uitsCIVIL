@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import Panel from "../pages/Panel";
 import Achievements from "../pages/Achievements";
+import AchievementDetail from "../pages/AchievementDetail";
 import Events from "../pages/Events";
 import Participations from "../pages/Participations";
 import Certification from "../pages/Certification";
@@ -41,6 +42,7 @@ const AppRoutes = () => {
         <Route path="/uitsCIVIL" element={<Home />} />
         <Route path="/uitsCIVIL/panel" element={<Panel />} />
         <Route path="/uitsCIVIL/achievements" element={<Achievements />} />
+        <Route path="/uitsCIVIL/achievement/:id" element={<AchievementDetail />} />
         <Route path="/uitsCIVIL/events" element={<Events />} />
         <Route path="/uitsCIVIL/participations" element={<Participations />} />
         <Route path="/uitsCIVIL/certification" element={<Certification />} />
