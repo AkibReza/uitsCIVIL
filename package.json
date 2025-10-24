@@ -13,6 +13,7 @@
     "seed": "node src/scripts/seedFirestore.js"
   },
   "dependencies": {
+    "@portabletext/react": "^4.0.3",
     "@sanity/client": "^7.12.0",
     "@sanity/image-url": "^1.2.0",
     "firebase": "^12.1.0",

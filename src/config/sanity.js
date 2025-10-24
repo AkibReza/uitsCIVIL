@@ -157,3 +157,250 @@ export const fetchAchievementById = async (id) => {
   }
 };
 
+// Fetch all past events (for Events page)
+export const fetchEvents = async () => {
+  try {
+    const query = `*[_type == "event"] | order(date desc, order asc) {
+      _id,
+      title,
+      date,
+      description,
+      images[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching past events:", error);
+    return [];
+  }
+};
+
+// Fetch upcoming events (for UpcomingEvents page)
+export const fetchUpcomingEvents = async () => {
+  try {
+    const query = `*[_type == "upcomingEvent"] | order(date asc) {
+      _id,
+      title,
+      date,
+      time,
+      venue,
+      description,
+      details,
+      organizer,
+      capacity,
+      registered,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      images[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching upcoming events:", error);
+    return [];
+  }
+};
+
+// Fetch a specific event by ID (past events)
+export const fetchEventById = async (id) => {
+  try {
+    const query = `*[_type == "event" && _id == $id][0] {
+      _id,
+      title,
+      date,
+      description,
+      images[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query, { id });
+    return data;
+  } catch (error) {
+    console.error("Error fetching event by ID:", id, error);
+    return null;
+  }
+};
+
+// Fetch a specific upcoming event by ID
+export const fetchUpcomingEventById = async (id) => {
+  try {
+    const query = `*[_type == "upcomingEvent" && _id == $id][0] {
+      _id,
+      title,
+      date,
+      time,
+      venue,
+      description,
+      details,
+      organizer,
+      capacity,
+      registered,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      images[] {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query, { id });
+    return data;
+  } catch (error) {
+    console.error("Error fetching upcoming event by ID:", id, error);
+    return null;
+  }
+};
+
+// Fetch all articles
+export const fetchArticles = async () => {
+  try {
+    const query = `*[_type == "article"] | order(order asc, date desc) {
+      _id,
+      title,
+      slug,
+      author,
+      date,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      excerpt,
+      readTime,
+      tags,
+      content,
+      featured,
+      order
+    }`;
+
+    console.log("Sanity Config:", {
+      projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
+      dataset: import.meta.env.VITE_SANITY_DATASET,
+      apiVersion: "2024-01-01"
+    });
+    console.log("Executing Sanity query for articles...");
+    
+    const data = await client.fetch(query);
+    console.log("Sanity response:", data);
+    
+    return data;
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    console.error("Error details:", {
+      message: error.message,
+      statusCode: error.statusCode,
+      response: error.response
+    });
+    return [];
+  }
+};
+
+// Fetch a specific article by ID
+export const fetchArticleById = async (id) => {
+  try {
+    const query = `*[_type == "article" && _id == $id][0] {
+      _id,
+      title,
+      slug,
+      author,
+      date,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      excerpt,
+      readTime,
+      tags,
+      content,
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query, { id });
+    return data;
+  } catch (error) {
+    console.error("Error fetching article by ID:", id, error);
+    return null;
+  }
+};
+
+// Fetch article by slug
+export const fetchArticleBySlug = async (slug) => {
+  try {
+    const query = `*[_type == "article" && slug.current == $slug][0] {
+      _id,
+      title,
+      slug,
+      author,
+      date,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      excerpt,
+      readTime,
+      tags,
+      content,
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query, { slug });
+    return data;
+  } catch (error) {
+    console.error("Error fetching article by slug:", slug, error);
+    return null;
+  }
+};

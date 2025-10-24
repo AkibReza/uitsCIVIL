@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Clock, X, Users, Info } from 'lucide-react';
+import { Calendar, MapPin, Clock, X, Users, Info, Loader2 } from 'lucide-react';
+import { fetchUpcomingEvents, urlFor } from '../config/sanity';
 
 const colors = {
   primary: "#0ea5e9",
@@ -19,87 +20,51 @@ const colors = {
 
 const UpcomingEvents = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const events = [
-    {
-      id: 1,
-      title: "Advanced Concrete Mix Design Workshop",
-      date: "2025-08-25",
-      time: "10:00 AM - 4:00 PM",
-      venue: "UITS Engineering Lab",
-      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=250&fit=crop",
-      description: "Join us for an intensive workshop on advanced concrete mix design techniques. Learn about sustainable materials, high-performance concrete, and optimization strategies used in modern construction projects.",
-      details: "This comprehensive workshop will cover the latest developments in concrete mix design, including the use of supplementary cementitious materials, chemical admixtures, and fiber reinforcement. Participants will engage in hands-on activities and real-world case studies.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 50,
-      registered: 32
-    },
-    {
-      id: 2,
-      title: "Structural Health Monitoring Seminar",
-      date: "2025-08-30",
-      time: "2:00 PM - 5:00 PM", 
-      venue: "UITS Auditorium",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop",
-      description: "Explore cutting-edge technologies in structural health monitoring for concrete structures. Learn about sensors, data analysis, and predictive maintenance strategies.",
-      details: "Industry experts will present on IoT sensors, machine learning applications in structural monitoring, and case studies from major infrastructure projects. The seminar includes networking opportunities with professionals.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 150,
-      registered: 89
-    },
-    {
-      id: 3,
-      title: "Concrete Testing Laboratory Session",
-      date: "2025-09-05",
-      time: "9:00 AM - 12:00 PM",
-      venue: "Materials Testing Lab",
-      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=250&fit=crop",
-      description: "Hands-on laboratory session covering standard concrete testing procedures including compressive strength, slump test, and durability assessments.",
-      details: "Students will perform various concrete tests following ASTM and ACI standards. Each participant will prepare test specimens and analyze results using professional equipment under expert supervision.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 30,
-      registered: 24
-    },
-    {
-      id: 4,
-      title: "Sustainable Construction Materials Conference",
-      date: "2025-09-12",
-      time: "9:00 AM - 6:00 PM",
-      venue: "UITS Convention Center",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=250&fit=crop",
-      description: "Annual conference focusing on sustainable and eco-friendly concrete materials, green building practices, and carbon footprint reduction in construction.",
-      details: "Leading researchers and industry professionals will present the latest innovations in sustainable concrete, including recycled aggregates, bio-based admixtures, and carbon capture technologies in cement production.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 200,
-      registered: 156
-    },
-    {
-      id: 5,
-      title: "3D Concrete Printing Demonstration",
-      date: "2025-09-18",
-      time: "1:00 PM - 4:00 PM",
-      venue: "Innovation Lab",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop",
-      description: "Live demonstration of 3D concrete printing technology with hands-on experience in digital construction methods and parametric design.",
-      details: "Witness the future of construction with live 3D concrete printing demonstrations. Learn about digital design workflows, material requirements, and applications in modern architecture and construction.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 40,
-      registered: 18
-    },
-    {
-      id: 6,
-      title: "Industry Site Visit - Metro Construction",
-      date: "2025-09-25",
-      time: "8:00 AM - 5:00 PM",
-      venue: "Metro Rail Construction Site",
-      image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=250&fit=crop",
-      description: "Educational site visit to major metro construction project to observe large-scale concrete operations and construction management practices.",
-      details: "Exclusive access to ongoing metro rail construction site with guided tours by project engineers. Observe high-volume concrete pours, quality control procedures, and safety protocols in action.",
-      organizer: "ACI UITS Student Chapter",
-      capacity: 25,
-      registered: 25
-    }
-  ];
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("Fetching upcoming events from Sanity...");
+        const sanityData = await fetchUpcomingEvents();
+        console.log("Fetched Sanity data:", sanityData);
+
+        if (sanityData && sanityData.length > 0) {
+          // Transform Sanity data to match the expected format
+          const transformedData = sanityData.map((event) => ({
+            id: event._id,
+            title: event.title,
+            date: event.date,
+            time: event.time,
+            venue: event.venue,
+            image: event.image?.asset?.url || 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=250&fit=crop',
+            description: event.description,
+            details: event.details,
+            organizer: event.organizer || 'ACI UITS Student Chapter',
+            capacity: event.capacity || 0,
+            registered: event.registered || 0,
+          }));
+
+          console.log("Transformed events:", transformedData);
+          setEvents(transformedData);
+        } else {
+          console.log("No events found in Sanity CMS");
+          setEvents([]);
+        }
+      } catch (error) {
+        console.error("Error loading events:", error);
+        setError("Failed to load events. Please check your Sanity CMS configuration.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -110,6 +75,95 @@ const UpcomingEvents = () => {
       day: 'numeric' 
     });
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center">
+          <Loader2
+            className="animate-spin mx-auto mb-4"
+            size={48}
+            style={{ color: colors.primary }}
+          />
+          <p style={{ color: colors.textSecondary }}>Loading upcoming events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              Unable to Load Events
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-lg font-medium transition-all duration-300"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.text,
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No events state
+  if (!events || events.length === 0) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              No Upcoming Events
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              There are no upcoming events scheduled at the moment. Please check back later!
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ 
@@ -189,17 +243,19 @@ const UpcomingEvents = () => {
                     className="absolute inset-0 opacity-60"
                     style={{ background: colors.gradientDark }}
                   />
-                  <div className="absolute top-4 right-4">
-                    <span 
-                      className="px-3 py-1 rounded-full text-sm font-semibold"
-                      style={{ 
-                        backgroundColor: colors.accent,
-                        color: colors.text 
-                      }}
-                    >
-                      {event.registered}/{event.capacity}
-                    </span>
-                  </div>
+                  {event.capacity > 0 && (
+                    <div className="absolute top-4 right-4">
+                      <span 
+                        className="px-3 py-1 rounded-full text-sm font-semibold"
+                        style={{ 
+                          backgroundColor: colors.accent,
+                          color: colors.text 
+                        }}
+                      >
+                        {event.registered}/{event.capacity}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Event Content */}
@@ -338,15 +394,17 @@ const UpcomingEvents = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
-                    {/* <Users size={20} style={{ color: colors.primary }} />
-                    <div>
-                      <p style={{ color: colors.textSecondary }} className="text-sm">Capacity</p>
-                      <p style={{ color: colors.text }} className="font-semibold">
-                        {selectedEvent.registered}/{selectedEvent.capacity} registered
-                      </p>
-                    </div> */}
-                  </div>
+                  {selectedEvent.capacity > 0 && (
+                    <div className="flex items-center gap-3">
+                      <Users size={20} style={{ color: colors.primary }} />
+                      <div>
+                        <p style={{ color: colors.textSecondary }} className="text-sm">Capacity</p>
+                        <p style={{ color: colors.text }} className="font-semibold">
+                          {selectedEvent.registered}/{selectedEvent.capacity} registered
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-6">

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, User, Calendar, ArrowRight, X, Clock, Tag } from 'lucide-react';
+import { Eye, User, Calendar, ArrowRight, X, Clock, Tag, Loader2 } from 'lucide-react';
+import { fetchArticles, urlFor } from '../config/sanity';
+import { PortableText } from '@portabletext/react';
 
 const colors = {
   primary: "#0ea5e9",
@@ -19,9 +21,107 @@ const colors = {
 
 const Articles = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Sample articles data with full content
-  const articles = [
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("Fetching articles from Sanity...");
+        const sanityData = await fetchArticles();
+        console.log("Articles received:", sanityData);
+
+        if (sanityData && sanityData.length > 0) {
+          setArticles(sanityData);
+          console.log("Articles loaded successfully:", sanityData.length);
+        } else {
+          console.warn("No articles found in Sanity CMS");
+          setError("No articles available. Please add articles in Sanity CMS.");
+        }
+      } catch (error) {
+        console.error("Error loading articles:", error);
+        setError(`Failed to load articles: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadArticles();
+  }, []);
+
+  // Portable Text components for rendering rich text
+  const portableTextComponents = {
+    block: {
+      h2: ({children}) => <h2 className="text-2xl font-bold mb-4 mt-6" style={{ color: colors.text }}>{children}</h2>,
+      h3: ({children}) => <h3 className="text-xl font-bold mb-3 mt-5" style={{ color: colors.text }}>{children}</h3>,
+      h4: ({children}) => <h4 className="text-lg font-bold mb-2 mt-4" style={{ color: colors.text }}>{children}</h4>,
+      normal: ({children}) => <p className="mb-4 leading-relaxed" style={{ color: colors.textSecondary }}>{children}</p>,
+      blockquote: ({children}) => (
+        <blockquote 
+          className="border-l-4 pl-4 py-2 mb-4 italic"
+          style={{ borderColor: colors.primary, color: colors.textSecondary }}
+        >
+          {children}
+        </blockquote>
+      ),
+    },
+    list: {
+      bullet: ({children}) => <ul className="list-disc list-inside mb-4 space-y-2" style={{ color: colors.textSecondary }}>{children}</ul>,
+      number: ({children}) => <ol className="list-decimal list-inside mb-4 space-y-2" style={{ color: colors.textSecondary }}>{children}</ol>,
+    },
+    listItem: {
+      bullet: ({children}) => <li className="ml-4" style={{ color: colors.textSecondary }}>{children}</li>,
+      number: ({children}) => <li className="ml-4" style={{ color: colors.textSecondary }}>{children}</li>,
+    },
+    marks: {
+      strong: ({children}) => <strong className="font-bold" style={{ color: colors.text }}>{children}</strong>,
+      em: ({children}) => <em className="italic">{children}</em>,
+      code: ({children}) => (
+        <code 
+          className="px-2 py-1 rounded text-sm font-mono"
+          style={{ backgroundColor: colors.surfaceLight, color: colors.primary }}
+        >
+          {children}
+        </code>
+      ),
+      link: ({value, children}) => {
+        const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
+        return (
+          <a 
+            href={value?.href}
+            target={target}
+            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+            className="underline hover:no-underline"
+            style={{ color: colors.primary }}
+          >
+            {children}
+          </a>
+        );
+      },
+    },
+    types: {
+      image: ({value}) => (
+        <div className="my-6">
+          <img
+            src={urlFor(value).width(800).url()}
+            alt={value.alt || 'Article image'}
+            className="w-full rounded-lg"
+          />
+          {value.caption && (
+            <p className="text-sm text-center mt-2" style={{ color: colors.textMuted }}>
+              {value.caption}
+            </p>
+          )}
+        </div>
+      ),
+    },
+  };
+
+  // Sample articles data with full content (fallback)
+  const fallbackArticles = [
     {
       id: 1,
       title: "Advanced Concrete Mix Design for Sustainable Construction",
@@ -240,6 +340,95 @@ const Articles = () => {
     setSelectedArticle(null);
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center">
+          <Loader2
+            className="animate-spin mx-auto mb-4"
+            size={48}
+            style={{ color: colors.primary }}
+          />
+          <p style={{ color: colors.textSecondary }}>Loading articles...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              Unable to Load Articles
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-lg font-medium transition-all duration-300"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.text,
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!articles || articles.length === 0) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              No Articles Available
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              Please add articles in Sanity CMS to display them here.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
       className="min-h-screen py-12 px-6"
@@ -301,10 +490,10 @@ const Articles = () => {
               <div className="flex flex-col lg:flex-row gap-6 h-full">
                 {/* Left Part - Image (1/3) */}
                 <div className="lg:w-1/3">
-                  <div className="relative overflow-hidden rounded-xl h-64 lg:h-full">
+                  <div className="relative overflow-hidden rounded-xl h-48 lg:h-56">
                     <img
-                      src={article.image}
-                      alt={article.title}
+                      src={article.image?.asset?.url || urlFor(article.image).width(400).height(250).url()}
+                      alt={article.image?.alt || article.title}
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -452,7 +641,7 @@ const Articles = () => {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center gap-2 mb-3">
-                        {selectedArticle.tags.map((tag, index) => (
+                        {selectedArticle.tags && selectedArticle.tags.map((tag, index) => (
                           <span
                             key={index}
                             className="px-3 py-1 rounded-full text-xs font-medium"
@@ -526,11 +715,11 @@ const Articles = () => {
                 {/* Modal Content */}
                 <div className="overflow-y-auto max-h-[70vh]">
                   {/* Featured Image */}
-                  <div className="relative h-64 md:h-80 overflow-hidden">
+                  <div className="relative w-full overflow-hidden">
                     <img
-                      src={selectedArticle.image}
-                      alt={selectedArticle.title}
-                      className="w-full h-full object-cover"
+                      src={selectedArticle.image?.asset?.url || urlFor(selectedArticle.image).width(1200).url()}
+                      alt={selectedArticle.image?.alt || selectedArticle.title}
+                      className="w-full h-auto object-contain max-h-96"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
@@ -538,17 +727,19 @@ const Articles = () => {
                   {/* Article Content */}
                   <div className="p-6 md:p-8 pb-16">
                     <div 
-                      className="prose prose-lg max-w-none"
+                      className="prose prose-lg max-w-none article-content"
                       style={{ 
                         color: colors.textSecondary,
                         '--tw-prose-headings': colors.text,
                         '--tw-prose-strong': colors.text,
                         '--tw-prose-links': colors.primary
                       }}
-                      dangerouslySetInnerHTML={{ 
-                        __html: selectedArticle.fullContent.replace(/\n\s*/g, '')
-                      }}
-                    />
+                    >
+                      <PortableText 
+                        value={selectedArticle.content} 
+                        components={portableTextComponents}
+                      />
+                    </div>
                   </div>
                 </div>
 
