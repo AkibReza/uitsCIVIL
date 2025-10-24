@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, Calendar, Mail, Phone } from "lucide-react";
+import { Users, Calendar, Mail, Phone, Loader2 } from "lucide-react";
+import { fetchPanelData, urlFor } from "../config/sanity";
 
 const colors = {
   primary: "#0ea5e9",
@@ -17,98 +18,147 @@ const colors = {
   gradientDark: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
 };
 
-const panelData = {
-  "2023-2024": {
-    title: "Panel 2023-2024",
-    members: [
-      {
-        name: "Ahmed Rahman",
-        position: "President",
-        department: "Civil Engineering",
-        email: "ahmed.rahman@uits.edu.bd",
-        phone: "+880 1712345678",
-      },
-      {
-        name: "Fatima Khan",
-        position: "Vice President",
-        department: "Civil Engineering",
-        email: "fatima.khan@uits.edu.bd",
-        phone: "+880 1787654321",
-      },
-      {
-        name: "Mohammad Ali",
-        position: "Secretary",
-        department: "Civil Engineering",
-        email: "mohammad.ali@uits.edu.bd",
-        phone: "+880 1798765432",
-      },
-      {
-        name: "Rashida Begum",
-        position: "Treasurer",
-        department: "Civil Engineering",
-        email: "rashida.begum@uits.edu.bd",
-        phone: "+880 1756789012",
-      },
-      {
-        name: "Karim Hassan",
-        position: "Technical Coordinator",
-        department: "Civil Engineering",
-        email: "karim.hassan@uits.edu.bd",
-        phone: "+880 1723456789",
-      },
-    ],
-  },
-  "2024-2025": {
-    title: "Panel 2024-2025",
-    members: [
-      {
-        name: "Nadia Islam",
-        position: "President",
-        department: "Civil Engineering",
-        email: "nadia.islam@uits.edu.bd",
-        phone: "+880 1734567890",
-      },
-      {
-        name: "Tariq Ahmed",
-        position: "Vice President",
-        department: "Civil Engineering",
-        email: "tariq.ahmed@uits.edu.bd",
-        phone: "+880 1745678901",
-      },
-      {
-        name: "Sadia Rahman",
-        position: "Secretary",
-        department: "Civil Engineering",
-        email: "sadia.rahman@uits.edu.bd",
-        phone: "+880 1756789012",
-      },
-      {
-        name: "Mahmud Hasan",
-        position: "Treasurer",
-        department: "Civil Engineering",
-        email: "mahmud.hasan@uits.edu.bd",
-        phone: "+880 1767890123",
-      },
-      {
-        name: "Amina Khatun",
-        position: "Technical Coordinator",
-        department: "Civil Engineering",
-        email: "amina.khatun@uits.edu.bd",
-        phone: "+880 1778901234",
-      },
-      {
-        name: "Rafiq Uddin",
-        position: "Event Coordinator",
-        department: "Civil Engineering",
-        email: "rafiq.uddin@uits.edu.bd",
-        phone: "+880 1789012345",
-      },
-    ],
-  },
-};
-
 const PanelPage = () => {
-  const [activePanel, setActivePanel] = useState("2024-2025");
+  const [activePanel, setActivePanel] = useState("");
+  const [panelData, setPanelData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadPanelData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const sanityData = await fetchPanelData();
+
+        if (sanityData && sanityData.length > 0) {
+          // Transform Sanity data to match the expected format
+          const transformedData = {};
+          sanityData.forEach((panel) => {
+            transformedData[panel.year] = {
+              title: panel.title || `Panel ${panel.year}`,
+              members: panel.members
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .map((member) => ({
+                  name: member.name,
+                  position: member.position,
+                  department: member.department,
+                  email: member.email,
+                  phone: member.phone,
+                  image: member.image,
+                  bio: member.bio,
+                })),
+            };
+          });
+
+          setPanelData(transformedData);
+
+          // Set the most recent panel as active
+          if (sanityData[0]?.year) {
+            setActivePanel(sanityData[0].year);
+          }
+        } else {
+          setError("No panel data available. Please add panel data in Sanity CMS.");
+        }
+      } catch (error) {
+        console.error("Error loading panel data:", error);
+        setError("Failed to load panel data. Please check your Sanity CMS configuration.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPanelData();
+  }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center">
+          <Loader2
+            className="animate-spin mx-auto mb-4"
+            size={48}
+            style={{ color: colors.primary }}
+          />
+          <p style={{ color: colors.textSecondary }}>Loading panel data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              Unable to Load Panel Data
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-lg font-medium transition-all duration-300"
+              style={{
+                backgroundColor: colors.primary,
+                color: colors.text,
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!panelData || Object.keys(panelData).length === 0) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
+        <div className="text-center max-w-md">
+          <div
+            className="rounded-lg p-8"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <h2
+              className="text-2xl font-bold mb-4"
+              style={{ color: colors.text }}
+            >
+              No Panel Data Available
+            </h2>
+            <p
+              className="mb-4"
+              style={{ color: colors.textSecondary }}
+            >
+              Please add panel data in Sanity CMS to display the executive panel members.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -191,12 +241,20 @@ const PanelPage = () => {
                 className="rounded-lg p-6 hover:scale-105 transition-transform duration-300"
                 style={{ backgroundColor: colors.surface }}
               >
-                {/* Image Placeholder */}
+                {/* Image or Placeholder */}
                 <div
-                  className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center"
+                  className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden"
                   style={{ backgroundColor: colors.surfaceLight }}
                 >
-                  <Users size={32} style={{ color: colors.textMuted }} />
+                  {member.image?.asset?._id ? (
+                    <img
+                      src={urlFor(member.image).width(200).height(200).url()}
+                      alt={member.image?.alt || member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Users size={32} style={{ color: colors.textMuted }} />
+                  )}
                 </div>
 
                 {/* Member Info */}
