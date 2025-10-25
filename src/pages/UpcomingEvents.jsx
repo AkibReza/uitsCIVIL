@@ -221,8 +221,8 @@ const UpcomingEvents = () => {
                   background: 'rgba(30, 41, 59, 0.4)',
                   borderColor: colors.border,
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                  width: '500px',
-                  height: '500px',
+                  width: '380px',
+                  height: '520px',
                   transition: 'all 0.3s ease, box-shadow 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
@@ -233,20 +233,21 @@ const UpcomingEvents = () => {
                 }}
               >
                 {/* Event Image */}
-                <div className="relative flex-1 overflow-hidden">
+                <div className="relative overflow-hidden" style={{ height: '280px', backgroundColor: colors.background }}>
                   <img 
                     src={event.image} 
                     alt={event.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
                   />
                   <div 
-                    className="absolute inset-0 opacity-60"
+                    className="absolute inset-0 opacity-40"
                     style={{ background: colors.gradientDark }}
                   />
                   {event.capacity > 0 && (
                     <div className="absolute top-4 right-4">
                       <span 
-                        className="px-3 py-1 rounded-full text-sm font-semibold"
+                        className="px-3 py-1 rounded-full text-xs font-semibold"
                         style={{ 
                           backgroundColor: colors.accent,
                           color: colors.text 
@@ -259,43 +260,43 @@ const UpcomingEvents = () => {
                 </div>
 
                 {/* Event Content */}
-                <div className="p-6 flex flex-col justify-between flex-1">
+                <div className="p-5 flex flex-col justify-between" style={{ height: '240px' }}>
                   <div>
-                    <h3 className="text-xl font-bold mb-3 line-clamp-2" style={{ color: colors.text }}>
+                    <h3 className="text-lg font-bold mb-3 line-clamp-2" style={{ color: colors.text }}>
                       {event.title}
                     </h3>
                     
-                    <div className="space-y-3 mb-4">
-                      <div className="flex items-center gap-3">
-                        <Calendar size={18} style={{ color: colors.primary }} />
-                        <span style={{ color: colors.textSecondary }} className="text-sm">
+                    <div className="space-y-2 mb-3">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={16} style={{ color: colors.primary }} />
+                        <span style={{ color: colors.textSecondary }} className="text-xs">
                           {formatDate(event.date)}
                         </span>
                       </div>
                       
-                      <div className="flex items-center gap-3">
-                        <Clock size={18} style={{ color: colors.secondary }} />
-                        <span style={{ color: colors.textSecondary }} className="text-sm">
+                      <div className="flex items-center gap-2">
+                        <Clock size={16} style={{ color: colors.secondary }} />
+                        <span style={{ color: colors.textSecondary }} className="text-xs">
                           {event.time}
                         </span>
                       </div>
                       
-                      <div className="flex items-center gap-3">
-                        <MapPin size={18} style={{ color: colors.accent }} />
-                        <span style={{ color: colors.textSecondary }} className="text-sm">
+                      <div className="flex items-center gap-2">
+                        <MapPin size={16} style={{ color: colors.accent }} />
+                        <span style={{ color: colors.textSecondary }} className="text-xs line-clamp-1">
                           {event.venue}
                         </span>
                       </div>
                     </div>
                     
-                    <p style={{ color: colors.textMuted }} className="text-sm line-clamp-4 mb-4">
+                    <p style={{ color: colors.textMuted }} className="text-xs line-clamp-3">
                       {event.description}
                     </p>
                   </div>
                   
-                  <div className="mt-auto pt-4" style={{ borderTop: `1px solid ${colors.border}` }}>
+                  <div className="mt-auto pt-3" style={{ borderTop: `1px solid ${colors.border}` }}>
                     <button 
-                      className="text-sm font-semibold flex items-center gap-2 group-hover:gap-3 transition-all duration-300"
+                      className="text-xs font-semibold flex items-center gap-2 group-hover:gap-3 transition-all duration-300"
                       style={{ color: colors.primary }}
                     >
                       Learn More
@@ -337,24 +338,30 @@ const UpcomingEvents = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="relative">
+              <div className="relative" style={{ backgroundColor: colors.background }}>
                 <img 
                   src={selectedEvent.image} 
                   alt={selectedEvent.title}
-                  className="w-full h-64 object-cover"
+                  className="w-full"
+                  style={{ 
+                    maxHeight: '450px', 
+                    minHeight: '300px',
+                    objectFit: 'cover',
+                    objectPosition: 'center'
+                  }}
                 />
                 <div 
-                  className="absolute inset-0 opacity-60"
+                  className="absolute inset-0 opacity-30 pointer-events-none"
                   style={{ background: colors.gradientDark }}
                 />
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm"
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+                  className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm hover:opacity-80 transition-opacity z-10"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
                 >
                   <X size={20} style={{ color: colors.text }} />
                 </button>
-                <div className="absolute bottom-4 left-6 right-6">
+                <div className="absolute bottom-0 left-0 right-0 p-6" style={{ background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)' }}>
                   <h2 className="text-2xl font-bold mb-2" style={{ color: colors.text }}>
                     {selectedEvent.title}
                   </h2>

@@ -50,14 +50,19 @@ export default {
       name: 'image',
       title: 'Profile Image',
       type: 'image',
+      description: 'Upload a professional photo of the panel member (recommended: square image, minimum 400x400px)',
+      validation: (Rule) => Rule.required(),
       options: {
         hotspot: true,
+        accept: 'image/*',
       },
       fields: [
         {
           name: 'alt',
           title: 'Alt Text',
           type: 'string',
+          description: 'Describe the image for accessibility (e.g., "Photo of John Doe")',
+          validation: (Rule) => Rule.required(),
         },
       ],
     },
@@ -80,6 +85,15 @@ export default {
       title: 'name',
       subtitle: 'position',
       media: 'image',
+      department: 'department',
+    },
+    prepare(selection) {
+      const { title, subtitle, media, department } = selection
+      return {
+        title: title,
+        subtitle: `${subtitle} - ${department}`,
+        media: media,
+      }
     },
   },
 }
