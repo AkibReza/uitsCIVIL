@@ -17,6 +17,8 @@ import Articles from "../pages/Articles";
 import Papers from "../pages/Papers";
 import UpcomingEvents from "../pages/UpcomingEvents";
 import Comments from "../pages/Comments";
+import Gallery from "../pages/Gallery";
+import FAQ from "../pages/FAQ";
 
 const AppRoutes = () => {
   return (
@@ -53,6 +55,8 @@ const AppRoutes = () => {
         <Route path="/uitsCIVIL/papers" element={<Papers />} />
         <Route path="/uitsCIVIL/upcoming-events" element={<UpcomingEvents />} />
         <Route path="/uitsCIVIL/comments" element={<Comments />} />
+        <Route path="/uitsCIVIL/gallery" element={<Gallery />} />
+        <Route path="/uitsCIVIL/faq" element={<FAQ />} />
       </Routes>
     </AuthProvider>
   );

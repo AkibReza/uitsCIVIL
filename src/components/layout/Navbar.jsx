@@ -1,294 +1,260 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const { user } = useAuth();
-  const { isDark, theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHomePage = location.pathname === "/uitsCIVIL" || location.pathname === "/uitsCIVIL/";
+
+  // Scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isSidebarOpen && !event.target.closest(".sidebar") && !event.target.closest(".menu-button")) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isSidebarOpen]);
+
+  // Close sidebar on route change
+  useEffect(() => {
+    setIsSidebarOpen(false);
+    setIsOpen(false);
+  }, [location]);
+
+  const navLinks = [
+    { to: "/uitsCIVIL/panel", label: "Panel" },
+    { to: "/uitsCIVIL/achievements", label: "Achievements" },
+    { to: "/uitsCIVIL/events", label: "Events" },
+    { to: "/uitsCIVIL/certification", label: "Certification" },
+    { to: "/uitsCIVIL/articles", label: "Articles" },
+    { to: "/uitsCIVIL/upcoming-events", label: "Upcoming Events" },
+    { to: "/uitsCIVIL/about", label: "About Us" },
+    { to: "/uitsCIVIL/contact", label: "Contact" },
+    { to: "/uitsCIVIL/sponsorship", label: "Sponsorship" },
+    { to: "/uitsCIVIL/comments", label: "Reviews" },
+  ];
+
+  const authLink = user
+    ? { to: "/uitsCIVIL/dashboard", label: "Dashboard" }
+    : { to: "/uitsCIVIL/login", label: "Log In" };
 
   return (
-    <nav
-      className={`${theme.navbar.background} ${theme.navbar.text} ${theme.navbar.shadow} z-20`}
-    >
-      <div className="container mx-auto px-6 py-3">
-        {/* Desktop Grid Layout */}
-        <div className="hidden md:grid grid-cols-[auto_1fr_auto] items-center gap-8 min-h-[60px]">
-          {/* Column 1: Logo */}
-          <div className="flex justify-start items-center">
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isHomePage && !scrolled
+            ? "bg-transparent"
+            : `${theme.navbar.background} ${theme.navbar.shadow}`
+        } ${theme.navbar.text}`}
+      >
+        <div className="container mx-auto px-6">
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center justify-between" style={{ height: scrolled ? '60px' : '80px', transition: 'height 0.3s ease' }}>
+            {/* Logo */}
+            <div className="flex justify-start items-center">
+              <Link
+                to="/uitsCIVIL"
+                className={`font-bold text-2xl ${theme.logo.gradient} ${theme.logo.textClip} hover:scale-105 transition-transform duration-200`}
+              >
+                UITS CIVIL
+              </Link>
+            </div>
+
+            {/* Navigation Links - Show when not scrolled */}
+            {!scrolled && (
+              <div className="flex flex-col justify-center items-center space-y-2 flex-1 mx-8">
+                {/* First row of links */}
+                <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1">
+                  {navLinks.slice(0, 5).map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Second row of links */}
+                <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1">
+                  {navLinks.slice(5).map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                  <Link
+                    to={authLink.to}
+                    className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
+                  >
+                    {authLink.label}
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Menu Button - Show when scrolled */}
+            {scrolled && (
+              <div className="flex justify-end items-center">
+                <button
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className="menu-button p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Toggle menu"
+                >
+                  <Menu className="h-5 w-5 text-white" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Layout - Single row with hamburger */}
+          <div className="md:hidden flex justify-between items-center h-12">
             <Link
               to="/uitsCIVIL"
-              className={`font-bold text-2xl ${theme.logo.gradient} ${theme.logo.textClip} hover:scale-105 transition-transform duration-200`}
+              className={`font-bold text-xl ${theme.logo.gradient} ${theme.logo.textClip} hover:scale-105 transition-transform duration-200`}
             >
               UITS CIVIL
             </Link>
-          </div>
 
-          {/* Column 2: Navigation Links (2 rows) */}
-          <div className="flex flex-col justify-center items-center space-y-2">
-            {/* First row of links */}
-            <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1">
-              <Link
-                to="/uitsCIVIL/panel"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
+            <div className="flex items-center gap-3">
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
-                Panel
-              </Link>
-              <Link
-                to="/uitsCIVIL/achievements"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Achievements
-              </Link>
-              <Link
-                to="/uitsCIVIL/events"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Events
-              </Link>
-              <Link
-                to="/uitsCIVIL/certification"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Certification
-              </Link>
-              <Link
-                to="/uitsCIVIL/articles"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Articles
-              </Link>
-            </div>
-
-            {/* Second row of links */}
-            <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-1">
-              <Link
-                to="/uitsCIVIL/upcoming-events"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Upcoming Events
-              </Link>
-              <Link
-                to="/uitsCIVIL/about"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                About Us
-              </Link>
-              <Link
-                to="/uitsCIVIL/contact"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Contact
-              </Link>
-              <Link
-                to="/uitsCIVIL/sponsorship"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Sponsorship
-              </Link>
-              <Link
-                to="/uitsCIVIL/comments"
-                className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-              >
-                Reviews
-              </Link>
-              {user ? (
-                <Link
-                  to="/uitsCIVIL/dashboard"
-                  className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to="/uitsCIVIL/login"
-                  className={`text-sm font-medium px-4 py-1.5 rounded-lg ${theme.navLinks.hover} transition-all duration-200 hover:scale-105 whitespace-nowrap`}
-                >
-                  Log In
-                </Link>
-              )}
+                  {isOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
             </div>
           </div>
 
-          {/* Column 3: Theme Toggle */}
-          <div className="flex justify-end items-center">
-            <button
-              onClick={toggleTheme}
-              className={`p-2 rounded-full ${theme.buttons.toggle.background} ${theme.buttons.toggle.hover} transition-colors duration-200 focus:outline-none focus:ring-2 ${theme.buttons.toggle.ring}`}
-              aria-label="Toggle theme"
-            >
-              <svg
-                className={`h-5 w-5 ${theme.buttons.toggle.text}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                {isDark ? (
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clipRule="evenodd"
-                  />
-                ) : (
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Layout - Single row with hamburger */}
-        <div className="md:hidden flex justify-between items-center h-12">
-          <Link
-            to="/uitsCIVIL"
-            className={`font-bold text-xl ${theme.logo.gradient} ${theme.logo.textClip} hover:scale-105 transition-transform duration-200`}
+          {/* Mobile menu */}
+          <div
+            className={`${isOpen ? "block" : "hidden"} md:hidden pb-3 ${
+              theme.mobileMenu.border
+            } mt-3 ${theme.mobileMenu.background} border-t`}
           >
-            UITS CIVIL
-          </Link>
-
-          <div className="flex items-center gap-3">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className={`p-2 rounded-full ${theme.buttons.toggle.background} ${theme.buttons.toggle.hover} transition-colors duration-200 focus:outline-none focus:ring-2 ${theme.buttons.toggle.ring}`}
-              aria-label="Toggle theme"
-            >
-              <svg
-                className={`h-4 w-4 ${theme.buttons.toggle.text}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                {isDark ? (
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clipRule="evenodd"
-                  />
-                ) : (
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                )}
-              </svg>
-            </button>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 rounded-lg ${theme.buttons.toggle.background} ${theme.buttons.toggle.hover} transition-colors duration-200 focus:outline-none focus:ring-2 ${theme.buttons.toggle.ring}`}
-            >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+            <div className="flex flex-col space-y-1 pt-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className={`pt-2 ${theme.mobileMenu.border} mt-2 border-t`}>
+                <Link
+                  to={authLink.to}
+                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
+                >
+                  {authLink.label}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile menu */}
-        <div
-          className={`${isOpen ? "block" : "hidden"} md:hidden pb-3 ${
-            theme.mobileMenu.border
-          } mt-3 ${theme.mobileMenu.background} border-t`}
-        >
-          <div className="flex flex-col space-y-1 pt-3">
-            <Link
-              to="/uitsCIVIL/panel"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
+      {/* Desktop Sidebar - Slide from right */}
+      <div
+        className={`sidebar fixed top-0 right-0 h-full w-80 bg-gray-900/95 backdrop-blur-md shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "translate-x-full"
+        } hidden md:block`}
+      >
+        <div className="p-6 h-full overflow-y-auto">
+          {/* Close Button */}
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Navigation
+            </h2>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Close menu"
             >
-              Panel
-            </Link>
-            <Link
-              to="/uitsCIVIL/achievements"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Achievements
-            </Link>
-            <Link
-              to="/uitsCIVIL/events"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Events
-            </Link>
-            <Link
-              to="/uitsCIVIL/certification"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Certification
-            </Link>
-            <Link
-              to="/uitsCIVIL/articles"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Articles
-            </Link>
-            <Link
-              to="/uitsCIVIL/upcoming-events"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Upcoming Events
-            </Link>
-            <Link
-              to="/uitsCIVIL/about"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              About Us
-            </Link>
-            <Link
-              to="/uitsCIVIL/contact"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Contact
-            </Link>
-            <Link
-              to="/uitsCIVIL/sponsorship"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Sponsorship
-            </Link>
-            <Link
-              to="/uitsCIVIL/comments"
-              className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-            >
-              Reviews
-            </Link>
-            <div className={`pt-2 ${theme.mobileMenu.border} mt-2 border-t`}>
-              {user ? (
-                <Link
-                  to="/uitsCIVIL/dashboard"
-                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to="/uitsCIVIL/login"
-                  className={`text-sm font-medium ${theme.mobileMenu.linkHover} px-4 py-2.5 rounded-lg transition-all duration-200`}
-                >
-                  Log In
-                </Link>
-              )}
+              <X className="h-5 w-5 text-white" />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="flex flex-col space-y-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-sm font-medium px-4 py-3 rounded-lg hover:bg-gray-700 hover:text-blue-300 transition-all duration-200 text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            <div className="pt-4 mt-4 border-t border-gray-700">
+              <Link
+                to={authLink.to}
+                className="text-sm font-medium px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-white block text-center"
+              >
+                {authLink.label}
+              </Link>
             </div>
           </div>
         </div>
       </div>
-    </nav>
+
+      {/* Overlay for sidebar */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 hidden md:block"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+    </>
   );
 };
 

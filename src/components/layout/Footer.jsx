@@ -53,36 +53,44 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#about"
+                <Link
+                  to="/uitsCIVIL/panel"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Panel
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/uitsCIVIL/about"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#events"
+                <Link
+                  to="/uitsCIVIL/contact"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Events
-                </a>
+                  Contact Us
+                </Link>
               </li>
               <li>
-                <a
-                  href="#gallery"
+                <Link
+                  to="/uitsCIVIL/gallery"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Gallery
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#faq"
+                <Link
+                  to="/uitsCIVIL/faq"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -91,36 +99,36 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-white mb-4">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/research"
+                <Link
+                  to="/uitsCIVIL/achievements"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Research
-                </a>
+                  Achievements
+                </Link>
               </li>
               <li>
-                <a
-                  href="/publications"
+                <Link
+                  to="/uitsCIVIL/articles"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Publications
-                </a>
+                  Articles
+                </Link>
               </li>
               <li>
-                <a
-                  href="/workshops"
+                <Link
+                  to="/uitsCIVIL/events"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Workshops
-                </a>
+                  Events
+                </Link>
               </li>
               <li>
-                <a
-                  href="/membership"
+                <Link
+                  to="/uitsCIVIL/sponsorship"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Membership
-                </a>
+                  Sponsorship
+                </Link>
               </li>
             </ul>
           </div>

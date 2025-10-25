@@ -404,3 +404,157 @@ export const fetchArticleBySlug = async (slug) => {
     return null;
   }
 };
+
+// Fetch all media gallery items
+export const fetchMediaGallery = async () => {
+  try {
+    const query = `*[_type == "mediaGallery"] | order(order asc) {
+      _id,
+      title,
+      category,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      description,
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching media gallery:", error);
+    return [];
+  }
+};
+
+// Fetch featured media gallery items for homepage slider
+export const fetchFeaturedMediaGallery = async () => {
+  try {
+    const query = `*[_type == "mediaGallery" && featured == true] | order(order asc) {
+      _id,
+      title,
+      category,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt,
+        caption
+      },
+      description,
+      featured,
+      order
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching featured media gallery:", error);
+    return [];
+  }
+};
+
+// Fetch active faculty advisor
+export const fetchFacultyAdvisor = async () => {
+  try {
+    const query = `*[_type == "facultyAdvisor" && active == true][0] {
+      _id,
+      name,
+      title,
+      credentials,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      message,
+      email,
+      phone,
+      active
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching faculty advisor:", error);
+    return null;
+  }
+};
+
+// Fetch active leadership messages
+export const fetchLeadershipMessages = async () => {
+  try {
+    const query = `*[_type == "leadership" && active == true] | order(order asc) {
+      _id,
+      name,
+      position,
+      academicInfo,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      message,
+      email,
+      order,
+      active
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching leadership messages:", error);
+    return [];
+  }
+};
+
+// Fetch all FAQs
+export const fetchFAQs = async () => {
+  try {
+    const query = `*[_type == "faq"] | order(order asc) {
+      _id,
+      question,
+      answer,
+      category,
+      order,
+      featured
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching FAQs:", error);
+    return [];
+  }
+};
+
+// Fetch featured FAQs for homepage
+export const fetchFeaturedFAQs = async () => {
+  try {
+    const query = `*[_type == "faq" && featured == true] | order(order asc) {
+      _id,
+      question,
+      answer,
+      category,
+      order,
+      featured
+    }`;
+
+    const data = await client.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching featured FAQs:", error);
+    return [];
+  }
+};
