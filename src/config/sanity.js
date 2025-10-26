@@ -3,8 +3,8 @@ import imageUrlBuilder from "@sanity/image-url";
 
 // Sanity client configuration
 export const client = createClient({
-  projectId: import.meta.env.VITE_SANITY_PROJECT_ID || "your-project-id", // Replace with your Sanity project ID
-  dataset: import.meta.env.VITE_SANITY_DATASET || "production", // or 'development'
+  projectId: import.meta.env.VITE_SANITY_PROJECT_ID || "f5ktsz1i", // Your Sanity project ID
+  dataset: import.meta.env.VITE_SANITY_DATASET || "production",
   useCdn: true, // Enable CDN for faster response times
   apiVersion: "2024-01-01", // Use current date in YYYY-MM-DD format
   token: import.meta.env.VITE_SANITY_TOKEN, // Optional: only if you need to write data from the frontend
@@ -322,20 +322,20 @@ export const fetchArticles = async () => {
     console.log("Sanity Config:", {
       projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
       dataset: import.meta.env.VITE_SANITY_DATASET,
-      apiVersion: "2024-01-01"
+      apiVersion: "2024-01-01",
     });
     console.log("Executing Sanity query for articles...");
-    
+
     const data = await client.fetch(query);
     console.log("Sanity response:", data);
-    
+
     return data;
   } catch (error) {
     console.error("Error fetching articles:", error);
     console.error("Error details:", {
       message: error.message,
       statusCode: error.statusCode,
-      response: error.response
+      response: error.response,
     });
     return [];
   }
