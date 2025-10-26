@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -9,6 +9,8 @@ import {
   User,
   MessageSquare,
 } from "lucide-react";
+import { db } from "../config/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const colors = {
   primary: "#0ea5e9",
@@ -42,15 +44,31 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Firebase integration would go here
-      // For now, simulating submission
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Validate form
+      if (
+        !formData.name ||
+        !formData.email ||
+        !formData.subject ||
+        !formData.message
+      ) {
+        setSubmitStatus("error");
+        setIsSubmitting(false);
+        return;
+      }
 
-      console.log("Form submitted:", formData);
+      // Add to Firebase Firestore
+      await addDoc(collection(db, "contactMessages"), {
+        ...formData,
+        status: "unread",
+        createdAt: serverTimestamp(),
+        readAt: null,
+      });
+
       setSubmitStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
@@ -107,8 +125,8 @@ const Contact = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Get in touch with the ACI Student Chapter at UITS. We're here to
-              help with your concrete engineering journey.
+              Get in touch with the ACI Student Chapter at UITS. We&apos;re here
+              to help with your concrete engineering journey.
             </p>
           </motion.div>
         </div>
@@ -125,8 +143,8 @@ const Contact = () => {
             <h2 className="text-3xl font-bold mb-8">Get In Touch</h2>
             <p style={{ color: colors.textSecondary }} className="mb-8 text-lg">
               Have questions about ACI, concrete technology, or want to join our
-              chapter? We'd love to hear from you. Reach out through any of the
-              methods below.
+              chapter? We&apos;d love to hear from you. Reach out through any of
+              the methods below.
             </p>
 
             <div className="space-y-6">
@@ -273,6 +291,7 @@ const Contact = () => {
               <motion.button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
+                type="button"
                 className="w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-200 flex items-center justify-center space-x-2"
                 style={{
                   background: isSubmitting ? colors.textMuted : colors.gradient,

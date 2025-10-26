@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Tasks from "../components/Tasks";
 import Attendance from "../components/Attendance";
 import Payments from "../components/Payments";
+import ContactMessages from "../components/ContactMessages";
 import { colors } from "../constants/colors";
 
 const Dashboard = () => {
@@ -28,26 +29,12 @@ const Dashboard = () => {
         return <Attendance />;
       case "payments":
         return <Payments />;
+      case "messages":
+        return <ContactMessages />;
       default:
         return <Tasks />;
     }
   };
-
-  const TabButton = ({ name, label }) => (
-    <button
-      onClick={() => setActiveTab(name)}
-      className={`px-4 py-2 rounded transition-colors ${
-        activeTab === name ? "font-semibold" : ""
-      }`}
-      style={{
-        backgroundColor:
-          activeTab === name ? colors.surfaceLight : "transparent",
-        color: activeTab === name ? colors.text : colors.textSecondary,
-      }}
-    >
-      {label}
-    </button>
-  );
 
   return (
     <div
@@ -73,10 +60,68 @@ const Dashboard = () => {
       </header>
 
       <main className="container mx-auto p-4">
-        <div className="mb-6 flex gap-4">
-          <TabButton name="tasks" label="Tasks" />
-          <TabButton name="attendance" label="Attendance" />
-          <TabButton name="payments" label="Payments" />
+        <div className="mb-6 flex gap-4 flex-wrap">
+          <button
+            onClick={() => setActiveTab("tasks")}
+            className={`px-4 py-2 rounded transition-colors ${
+              activeTab === "tasks" ? "font-semibold" : ""
+            }`}
+            style={{
+              backgroundColor:
+                activeTab === "tasks" ? colors.surfaceLight : "transparent",
+              color: activeTab === "tasks" ? colors.text : colors.textSecondary,
+            }}
+          >
+            Tasks
+          </button>
+          <button
+            onClick={() => setActiveTab("attendance")}
+            className={`px-4 py-2 rounded transition-colors ${
+              activeTab === "attendance" ? "font-semibold" : ""
+            }`}
+            style={{
+              backgroundColor:
+                activeTab === "attendance"
+                  ? colors.surfaceLight
+                  : "transparent",
+              color:
+                activeTab === "attendance" ? colors.text : colors.textSecondary,
+            }}
+          >
+            Attendance
+          </button>
+          <button
+            onClick={() => setActiveTab("payments")}
+            className={`px-4 py-2 rounded transition-colors ${
+              activeTab === "payments" ? "font-semibold" : ""
+            }`}
+            style={{
+              backgroundColor:
+                activeTab === "payments" ? colors.surfaceLight : "transparent",
+              color:
+                activeTab === "payments" ? colors.text : colors.textSecondary,
+            }}
+          >
+            Payments
+          </button>
+          {user.role === "admin" && (
+            <button
+              onClick={() => setActiveTab("messages")}
+              className={`px-4 py-2 rounded transition-colors ${
+                activeTab === "messages" ? "font-semibold" : ""
+              }`}
+              style={{
+                backgroundColor:
+                  activeTab === "messages"
+                    ? colors.surfaceLight
+                    : "transparent",
+                color:
+                  activeTab === "messages" ? colors.text : colors.textSecondary,
+              }}
+            >
+              Contact Messages
+            </button>
+          )}
         </div>
 
         {renderContent()}
